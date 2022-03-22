@@ -1,35 +1,34 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Главная страница</title>
+        <title>Main page</title>
     </head>
     <body>
-        <h2>Список пользователей</h2>
-        {{if ne .Users nil}}
+        <h2>User list</h2>
+        <a href="/create">Create user</a>
+        {{if .}}
             <table>
                 <thead>
                     <th>ID</th>
-                    <th>Логин</th>
-                    <th>Пароль</th>
-                    <th></th>
+                    <th>Login</th>
+                    <th>Password</th>
                     <th></th>
                 </thead>
                 
-                {{range .Users}}
+                {{range .}}
                     <tr>
                         <td>{{.Id}}</td>
                         <td>{{.Login}}</td>
                         <td>{{.Password}}</td>
-                        <td><a href="/edit/{{.Id}}"></a></td>
-                        <td><a href="/remove"></a></td>
+                        <td><a href="/edit/{{.Id}}">Change</a>
+                            <a href="/remove/{{.Id}}">Remove</a>
+                        </td>
                     </tr>
                 {{end}}
             </table>
         {{else}}
             <p></p>
-            <h4>No any users. Please, add them</h4>
-        {{end}}
-        <p></p>
-        <a href="/add">Добавить пользователя</a>
+            <h4>No any users. Please, add them!!!</h4>
+        {{end}}     
     </body>
 </html>
