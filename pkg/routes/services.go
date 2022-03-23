@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func StartPage(w http.ResponseWriter, r *http.Request){
+func MainPage(w http.ResponseWriter, r *http.Request){
 	users := []models.User{}
 
 	db,err := data.OpenDb()
@@ -58,7 +58,19 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 
-		http.Redirect(w,r,"/", 301)
+		userLogin := &http.Cookie{
+			Name: "login",
+			Value: login,
+		}
+		userPassword := &http.Cookie{
+			Name: "password",
+			Value: password,
+		}
+
+
+		r.AddCookie(userLogin)
+		r.AddCookie(userPassword)
+		http.Redirect(w,r,"/main", 301)
 	}else{
 		http.ServeFile(w,r,"templates/add.html")
 	}
@@ -107,7 +119,7 @@ func Edit_Post(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	http.Redirect(w,r,"/", 301)
+	http.Redirect(w,r,"/main", 301)
 }
 
 
@@ -127,5 +139,5 @@ func RemoveUser(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	http.Redirect(w,r,"/", 301)
+	http.Redirect(w,r,"/main", 301)
 }
