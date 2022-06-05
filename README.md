@@ -1,5 +1,5 @@
 # WebApp
-This project is just for practise)
+This project is just for practise and for myself using(maybe will be open for each one)
 
 ## DataBase:
 
