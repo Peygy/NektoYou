@@ -8,9 +8,9 @@ func CreateRoutes() *gin.Engine {
 	router := gin.Default()
 
 	router.POST("/login", login)
-	router.POST("/register", registration)
+	router.POST("/register", register)
 
-	privateRouter := router.Group("/api")
+	privateRouter := router.Group("/api", )
 	privateRouter.Use(jwtTokenCheck)
 
 	return router
