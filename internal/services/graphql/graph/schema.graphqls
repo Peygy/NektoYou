@@ -1,0 +1,13 @@
+type Mutation {
+  registerUser(input: UserInput!): AuthPayload!
+}
+
+input UserInput {
+  username: String!
+  password: String!
+}
+
+type AuthPayload {
+  accessToken: String!
+  refreshToken: String!
+}
