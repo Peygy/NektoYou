@@ -9,9 +9,10 @@ require (
 )
 
 require (
+	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240722094343-f42d170652d8 // indirect
 	go.uber.org/dig v1.17.1 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
-	go.uber.org/zap v1.26.0 // indirect
+	go.uber.org/zap v1.27.0 // indirect
 )
 
 require (

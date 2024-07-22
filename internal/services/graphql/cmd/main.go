@@ -10,7 +10,7 @@ func main () {
 	fx.New(
 		fx.Options(
 			fx.Provide(
-				logger.
+				logger.NewZapLogger(),
 			),
 			fx.Invoke(server.RunServers),
 		),

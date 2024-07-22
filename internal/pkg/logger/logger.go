@@ -17,7 +17,7 @@ type appLogger struct {
 	zapLogger *zap.Logger
 }
 
-func NewZapLogger() (ILogger, error) {
+func NewLogger() (ILogger, error) {
 	zapLogger, err := zap.NewProduction()
 	if err != nil {
 		return nil, err
