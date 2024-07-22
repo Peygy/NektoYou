@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -29,7 +29,7 @@ func playgroundHandler() gin.HandlerFunc {
 	}
 }
 
-func main() {
+func RunServers() {
 	r := gin.Default()
 	r.POST("/query", graphqlHandler())
 	r.GET("/", playgroundHandler())
