@@ -9,10 +9,10 @@ import (
 func main () {
 	fx.New(
 		fx.Options(
-			fx.Provide(
-				logger.NewZapLogger(),
+			fx.Provide( // определяем экземпляры сервисов, e.x сервер
+				logger.NewLogger,
 			),
-			fx.Invoke(server.RunServers),
+			fx.Invoke(server.RunServers), // определим маршруты
 		),
 	).Run()
 }
