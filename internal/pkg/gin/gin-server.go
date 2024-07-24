@@ -6,14 +6,20 @@ import (
 )
 
 type GinConfig struct {
-	Port 	string
+	Port string `yaml:"port"`
 }
 
 func NewGinServer(cfg *GinConfig, log logger.ILogger) *gin.Engine {
+	log.Info("Gin engine is created")
 	return gin.Default()
 }
 
 func RunGinServer(eng *gin.Engine, cfg *GinConfig, log logger.ILogger) error {
-	err := eng.Run(cfg.Port)
-	return err
+	if err := eng.Run(cfg.Port); err != nil {
+		log.Fatal("Gin server can't be runned on port " + cfg.Port)
+		return err
+	}
+
+	log.Info("Gin server runned on port " + cfg.Port)
+	return nil
 }
