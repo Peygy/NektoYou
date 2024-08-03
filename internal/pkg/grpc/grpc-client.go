@@ -1,30 +1,20 @@
 package grpc
 
 import (
-	"context"
-	"log"
-	"time"
-
+	"github.com/peygy/nektoyou/internal/pkg/logger"
 	"google.golang.org/grpc"
 )
 
-func main() {
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+type GrpcClient struct {
+	conn *grpc.ClientConn
+}
+
+func NewGrpcClient(cfg *GrpcConfig, log logger.ILogger) (*GrpcClient, error) {
+	conn, err := grpc.NewClient(cfg.Host + cfg.Port)
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	defer conn.Close()
-
-	client := pb.NewExampleServiceClient(conn)
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	req := &pb.HelloRequest{Name: "World"}
-	res, err := client.SayHello(ctx, req)
-	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		log.Error("Error while create grpc client: " + err.Error())
+		return nil, err
 	}
 
-	log.Printf("Greeting: %s", res.GetMessage())
+	return &GrpcClient{ conn }, nil
 }

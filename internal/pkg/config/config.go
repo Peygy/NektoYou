@@ -4,11 +4,13 @@ import (
 	"os"
 
 	"github.com/peygy/nektoyou/internal/pkg/gin"
+	"github.com/peygy/nektoyou/internal/pkg/grpc"
 	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
 	Gin *gin.GinConfig `yaml:"gin"`
+	Grpc *grpc.GrpcConfig `yaml:"grpc"`
 }
 
 func InitConfig(filePath string) (*Config, *gin.GinConfig, error) {
