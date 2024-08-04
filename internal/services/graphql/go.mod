@@ -5,7 +5,7 @@ go 1.22.5
 require (
 	github.com/99designs/gqlgen v0.17.49
 	github.com/gin-gonic/gin v1.10.0
-	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240803031717-c710f57652a2
+	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240804074027-90fc320f5b1a
 	github.com/vektah/gqlparser/v2 v2.5.16
 )
 

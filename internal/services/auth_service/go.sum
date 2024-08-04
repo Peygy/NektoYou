@@ -73,6 +73,8 @@ github.com/peygy/nektoyou/internal/pkg v0.0.0-20240804033340-f1c17574b1eb h1:rzQ
 github.com/peygy/nektoyou/internal/pkg v0.0.0-20240804033340-f1c17574b1eb/go.mod h1:W7yxtq5NH6k8yMXMInUL643ub0bJYuyChWM9X2hYFx8=
 github.com/peygy/nektoyou/internal/pkg v0.0.0-20240804034851-e3f7d3005b54 h1:cKvLLFP1PxpM8v+GEtwA6FFzojZUHypXqKq/cclpRLE=
 github.com/peygy/nektoyou/internal/pkg v0.0.0-20240804034851-e3f7d3005b54/go.mod h1:W7yxtq5NH6k8yMXMInUL643ub0bJYuyChWM9X2hYFx8=
+github.com/peygy/nektoyou/internal/pkg v0.0.0-20240804074027-90fc320f5b1a h1:bmuS3Xjj+yowHIJSt1WYibOS4Ke3Ygk3N8Ys3ATmeIc=
+github.com/peygy/nektoyou/internal/pkg v0.0.0-20240804074027-90fc320f5b1a/go.mod h1:W7yxtq5NH6k8yMXMInUL643ub0bJYuyChWM9X2hYFx8=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
