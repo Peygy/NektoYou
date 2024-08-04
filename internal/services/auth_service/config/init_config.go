@@ -8,8 +8,11 @@ import (
 
 const configPath = ".\\config\\config.dev.yml"
 
-func NewConfig() (*config.Config, *gin.GinConfig, *grpc.GrpcServerConfig, *grpc.GrpcClientConfig, error) {
-	cfg := config.InitConfig(configPath)
+func NewConfig() (*config.Config, *gin.GinConfig, *grpc.GrpcServerConfig, error) {
+	cfg, err := config.InitConfig(configPath)
+	if err != nil {
+		return nil, nil, nil, err
+	}
 
-	return cfg, cfg.Gin, cfg.GrpcServer, cfg.GrpcClient, nil
+	return cfg, cfg.Gin, cfg.GrpcServer, nil
 }

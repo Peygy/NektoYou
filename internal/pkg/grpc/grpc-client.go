@@ -6,25 +6,34 @@ import (
 )
 
 type GrpcClientConfig struct {
-	Port 		string 			`yaml:"port"`
-	Host 		string 			`yaml:"host"`
 	Services 	[]struct {
 		Name string `yaml:"name"`
 		Port string `yaml:"port"`
 		Host string `yaml:"host"`
-	}
+	} `yaml:"services"`
 }
 
-type GrpcClient struct {
-	conn *grpc.ClientConn
+type GrpcService struct {
+	Name string
+	Conn *grpc.ClientConn
 }
 
-func NewGrpcClient(cfg *GrpcClientConfig, log logger.ILogger) (*GrpcClient, error) {
-	conn, err := grpc.NewClient(cfg.Host + cfg.Port)
-	if err != nil {
-		log.Error("Error while create grpc client: " + err.Error())
-		return nil, err
+type GrpcPull struct {
+	Services []GrpcService
+}
+
+func NewGrpcClient(cfg *GrpcClientConfig, log logger.ILogger) (*GrpcPull, error) {
+	connPull := new(GrpcPull)
+	for _, val := range cfg.Services {
+		conn, err := grpc.NewClient(val.Host + val.Port)
+		if err != nil {
+			log.Error("Error while create grpc server" + val.Name + " connection: " + err.Error())
+			return nil, err
+		}
+	
+		connPull.Services = append(connPull.Services, GrpcService{val.Name, conn})
+		log.Info("To grpc pull is added new service: " + val.Name)
 	}
 
-	return &GrpcClient{conn}, nil
+	return connPull, nil
 }
