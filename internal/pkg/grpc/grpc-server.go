@@ -10,15 +10,15 @@ import (
 	"google.golang.org/grpc/keepalive"
 )
 
-type GrpcConfig struct {
+type GrpcServerConfig struct {
 	Port string `yaml:"port"`
 	Host string `yaml:"host"`
 }
 
 type GrpcServer struct {
-	Engine	*grpc.Server
-	Config 	*GrpcConfig
-	Log 	logger.ILogger
+	Engine *grpc.Server
+	Config *GrpcServerConfig
+	Log    logger.ILogger
 }
 
 const (
@@ -28,7 +28,7 @@ const (
 	gRPCTime          = 10
 )
 
-func NewGrpcServer(cfg *GrpcConfig, log logger.ILogger) *GrpcServer {
+func NewGrpcServer(cfg *GrpcServerConfig, log logger.ILogger) *GrpcServer {
 	grpcServer := grpc.NewServer(
 		grpc.KeepaliveParams(keepalive.ServerParameters{
 			MaxConnectionIdle: maxConnectionIdle * time.Minute,
@@ -38,7 +38,7 @@ func NewGrpcServer(cfg *GrpcConfig, log logger.ILogger) *GrpcServer {
 		}),
 	)
 
-	return &GrpcServer{ grpcServer, cfg, log }
+	return &GrpcServer{grpcServer, cfg, log}
 }
 
 func (s *GrpcServer) Run(ctx context.Context) error {
@@ -48,7 +48,7 @@ func (s *GrpcServer) Run(ctx context.Context) error {
 		return err
 	}
 
-	go func () {
+	go func() {
 		for {
 			select {
 			case <-ctx.Done():
@@ -58,7 +58,7 @@ func (s *GrpcServer) Run(ctx context.Context) error {
 				return
 			}
 		}
-	} ()
+	}()
 
 	s.Log.Info("Grpc server is listening on port: " + s.Config.Port)
 

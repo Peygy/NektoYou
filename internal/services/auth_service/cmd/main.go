@@ -1,19 +1,22 @@
 package main
 
 import (
-	config "api-gateway/configs"
-	"api-gateway/internal/app"
-	"log"
-
-	"github.com/spf13/viper"
+	"github.com/peygy/nektoyou/internal/pkg/gin"
+	"github.com/peygy/nektoyou/internal/pkg/logger"
+	"github.com/peygy/nektoyou/internal/services/auth_service/config"
+	"github.com/peygy/nektoyou/internal/services/auth_service/server"
+	"go.uber.org/fx"
 )
 
-func main() {
-	if err := config.Init(); err != nil {
-		log.Fatalf("%s", err.Error())
-	}
-
-	if err := app.Launch(viper.GetString("port")); err != nil {
-		log.Fatalf("%s", err.Error())
-	}
+func main () {
+	fx.New(
+		fx.Options(
+			fx.Provide(
+				config.NewConfig,
+				logger.NewLogger,
+				gin.NewGinServer,
+			),
+			fx.Invoke(server.RunServers),
+		),
+	).Run()
 }

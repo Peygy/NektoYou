@@ -8,11 +8,11 @@ import (
 	"go.uber.org/fx"
 )
 
-func RunServers(lc fx.Lifecycle, log logger.ILogger, gin *gin.GinServer) error {
+func RunServers(lc fx.Lifecycle, ctx context.Context, log logger.ILogger, gin *gin.GinServer) error {
 	lc.Append(fx.Hook {
 		OnStart: func(_ context.Context) error {
 			go func() {
-				if err := gin.Run(); err != nil {
+				if err := gin.Run(ctx); err != nil {
 					log.Fatal("Error running gin server")
 				}
 			}()
