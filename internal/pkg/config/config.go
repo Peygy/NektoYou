@@ -14,18 +14,18 @@ type Config struct {
 	GrpcClient	*grpc.GrpcClientConfig `yaml:"grpc-client,omitempty"`
 }
 
-func InitConfig(filePath string) (*Config, *gin.GinConfig, *grpc.GrpcServerConfig, *grpc.GrpcClientConfig, error) {
+func InitConfig(filePath string) (*Config, error) {
 	yamlFile, err := os.ReadFile(filePath)
 	if err != nil {
-		return nil, nil, nil, nil, err
+		return nil, err
 	}
 
 	cfg := &Config{}
 
 	err = yaml.Unmarshal(yamlFile, cfg)
 	if err != nil {
-		return nil, nil, nil, nil, err
+		return nil, err
 	}
 
-	return cfg, cfg.Gin, cfg.GrpcServer, cfg.GrpcClient, nil
+	return cfg, nil
 }
