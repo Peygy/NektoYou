@@ -8,14 +8,15 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
 	"github.com/peygy/nektoyou/internal/pkg/grpc"
+	ginServer "github.com/peygy/nektoyou/internal/pkg/gin"
 	"github.com/peygy/nektoyou/internal/services/graphql/graph"
 	pb "github.com/peygy/nektoyou/internal/services/graphql/internal/grpc_client/proto"
 )
 
-func InitEndpoints(eng *gin.Engine, grpcPull *grpc.GrpcPull) {
-	eng.POST("/query", graphqlHandler())
-	eng.GET("/", playgroundHandler())
-	eng.GET("/hello", helloHandler(grpcPull.Services))
+func InitEndpoints(eng *ginServer.GinServer, grpcPull *grpc.GrpcPull) {
+	eng.Engine.POST("/query", graphqlHandler())
+	eng.Engine.GET("/", playgroundHandler())
+	eng.Engine.GET("/hello", helloHandler(grpcPull.Services))
 }
 
 // Defining the Graphql handler
