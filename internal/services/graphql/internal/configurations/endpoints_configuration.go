@@ -1,15 +1,21 @@
 package configurations
 
 import (
+	"fmt"
+	"sort"
+
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
+	"github.com/peygy/nektoyou/internal/pkg/grpc"
 	"github.com/peygy/nektoyou/internal/services/graphql/graph"
+	pb "github.com/peygy/nektoyou/internal/services/graphql/internal/grpc_client/proto"
 )
 
-func InitEndpoints(eng *gin.Engine) {
+func InitEndpoints(eng *gin.Engine, grpcPull *grpc.GrpcPull) {
 	eng.POST("/query", graphqlHandler())
 	eng.GET("/", playgroundHandler())
+	eng.GET("/hello", helloHandler(grpcPull.Services))
 }
 
 // Defining the Graphql handler
@@ -29,5 +35,19 @@ func playgroundHandler() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
+func helloHandler(grpcServices []grpc.GrpcService) gin.HandlerFunc {
+	authConnIdx := sort.Search(len(grpcServices), func(i int) bool { return grpcServices[i].Name == "auth_service" })
+	cl := pb.NewGreeterClient(grpcServices[authConnIdx].Conn)
+
+	return func(c *gin.Context) {
+		r, err := cl.SayHello(c, &pb.HelloRequest{Word: "HIIIII"})
+		if err != nil {
+			fmt.Print(err)
+			return
+		}
+		fmt.Print("MESSAGE: " + r.GetMessage())
 	}
 }

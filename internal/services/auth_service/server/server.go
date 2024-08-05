@@ -12,11 +12,11 @@ import (
 func RunServers(lc fx.Lifecycle, ctx context.Context, log logger.ILogger, gin *gin.GinServer, grpc *grpc.GrpcServer) error {
 	lc.Append(fx.Hook {
 		OnStart: func(_ context.Context) error {
-			go func() {
+			/*go func() {
 				if err := gin.Run(ctx); err != nil {
 					log.Fatal("Error running gin server: " + err.Error())
 				}
-			}()
+			}()*/
 			go func() {
 				if err := grpc.Run(ctx); err != nil {
 					log.Fatal("Error running grpc server: " + err.Error())
