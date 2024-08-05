@@ -4,7 +4,7 @@ go 1.22.5
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240805025044-c478b932e3fa
+	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240805031536-4f3849c37388
 	github.com/spf13/viper v1.19.0
 	go.uber.org/fx v1.22.1
 	google.golang.org/grpc v1.65.0

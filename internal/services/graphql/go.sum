@@ -68,8 +68,8 @@ github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9G
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/pelletier/go-toml/v2 v2.2.2 h1:aYUidT7k73Pcl9nb2gScu7NSrKCSHIDE89b3+6Wq+LM=
 github.com/pelletier/go-toml/v2 v2.2.2/go.mod h1:1t835xjRzz80PqgE6HHgN2JOsmgYu/h4qDAS4n929Rs=
-github.com/peygy/nektoyou/internal/pkg v0.0.0-20240805025044-c478b932e3fa h1:v27HgyA7dZSvr7Yeth4YFBnxl2kmpc1MqbRxfJkCpMA=
-github.com/peygy/nektoyou/internal/pkg v0.0.0-20240805025044-c478b932e3fa/go.mod h1:W7yxtq5NH6k8yMXMInUL643ub0bJYuyChWM9X2hYFx8=
+github.com/peygy/nektoyou/internal/pkg v0.0.0-20240805031536-4f3849c37388 h1:qwOBi2ngy1l1divxFlDl2HwNFUGNGdmh1uUeBRE6HD8=
+github.com/peygy/nektoyou/internal/pkg v0.0.0-20240805031536-4f3849c37388/go.mod h1:W7yxtq5NH6k8yMXMInUL643ub0bJYuyChWM9X2hYFx8=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sergi/go-diff v1.3.1 h1:xkr+Oxo4BOQKmkn/B9eMK0g5Kg/983T9DqqPHwYqD+8=
