@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/peygy/nektoyou/internal/pkg/gin"
 	"github.com/peygy/nektoyou/internal/pkg/grpc"
 	"github.com/peygy/nektoyou/internal/pkg/logger"
 	"github.com/peygy/nektoyou/internal/pkg/context"
@@ -18,7 +17,6 @@ func main () {
 				config.NewConfig,
 				logger.NewLogger,
 				context.NewContext,
-				gin.NewGinServer, // delete
 				grpc.NewGrpcServer,
 			),
 			fx.Invoke(services.InitAuthGrpcServer),
