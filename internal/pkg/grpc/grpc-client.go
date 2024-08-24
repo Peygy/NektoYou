@@ -7,7 +7,7 @@ import (
 )
 
 type GrpcClientConfig struct {
-	Services 	[]struct {
+	Services []struct {
 		Name string `yaml:"name"`
 		Port string `yaml:"port"`
 		Host string `yaml:"host"`
@@ -26,12 +26,12 @@ type GrpcPull struct {
 func NewGrpcClient(cfg *GrpcClientConfig, log logger.ILogger) (*GrpcPull, error) {
 	connPull := new(GrpcPull)
 	for _, val := range cfg.Services {
-		conn, err := grpc.NewClient(val.Host + val.Port, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		conn, err := grpc.NewClient(val.Host+val.Port, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			log.Error("Error while create grpc server" + val.Name + " connection: " + err.Error())
 			return nil, err
 		}
-	
+
 		connPull.Services = append(connPull.Services, GrpcService{val.Name, conn})
 		log.Info("To grpc pull is added new service: " + val.Name)
 	}

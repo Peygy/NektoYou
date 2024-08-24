@@ -2,18 +2,18 @@ package configurations
 
 import (
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
-	"github.com/peygy/nektoyou/internal/pkg/grpc"
+	"github.com/gin-gonic/gin"
 	ginServer "github.com/peygy/nektoyou/internal/pkg/gin"
+	"github.com/peygy/nektoyou/internal/pkg/grpc"
 	"github.com/peygy/nektoyou/internal/services/graphql/graph"
 )
 
 func InitEndpoints(eng *ginServer.GinServer, grpcPull *grpc.GrpcPull) {
 	eng.Engine.Use(cors.Default())
-	routeGroup1 := eng.Engine.Group("/graphql") 
+	routeGroup1 := eng.Engine.Group("/graphql")
 	{
-		routeGroup1.POST("/hello", graphqlHandler(grpcPull.Services))
+		routeGroup1.POST("/register", graphqlHandler(grpcPull.Services))
 	}
 }
 

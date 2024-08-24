@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"name": "NektoYou",
+			"path": "."
+		},
+		{
+			"name": "client",
+			"path": "client"
+		},
+		{
+			"name": "pkg",
+			"path": "internal/pkg"
+		},
+		{
+			"name": "auth_service",
+			"path": "internal/services/auth_service"
+		},
+		{
+			"name": "graphql",
+			"path": "internal/services/graphql"
+		}
+	],
+	"settings": {}
+}
