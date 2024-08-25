@@ -10,7 +10,7 @@ import (
 	"sort"
 
 	"github.com/peygy/nektoyou/internal/services/graphql/graph/model"
-	pb "github.com/peygy/nektoyou/internal/services/graphql/internal/grpc_client/proto"
+	pb "github.com/peygy/nektoyou/internal/pkg/protos/graph_auth"
 )
 
 // RegisterUser is the resolver for the registerUser field.

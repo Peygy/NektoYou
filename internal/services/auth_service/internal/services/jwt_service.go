@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 
-	pb "github.com/peygy/nektoyou/internal/services/auth_service/internal/grpc_server/proto"
+	pb "github.com/peygy/nektoyou/internal/pkg/protos/graph_auth"
 	"github.com/peygy/nektoyou/internal/pkg/grpc"
 )
 

@@ -1,0 +1,9 @@
+gin:
+  port: "8081"
+  host: "localhost"
+
+grpc-client:
+  services:
+    - name: "auth_service"
+      port: "5101"
+      host: "localhost"
