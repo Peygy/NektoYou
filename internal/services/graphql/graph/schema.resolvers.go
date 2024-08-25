@@ -16,12 +16,12 @@ import (
 // RegisterUser is the resolver for the registerUser field.
 func (r *mutationResolver) RegisterUser(ctx context.Context, input model.UserInput) (*model.AuthPayload, error) {
 	authConnIdx := sort.Search(len(r.GrpcServices), func(i int) bool { return r.GrpcServices[i].Name == "auth_service" })
-	cl := pb.NewGreeterClient(r.GrpcServices[authConnIdx].Conn)
+	cl := pb.NewTokensGeneraterClient(r.GrpcServices[authConnIdx].Conn)
 
-	responce, err := cl.SayHello(ctx, &pb.HelloRequest{Word: input.Username+input.Password})
+	responce, err := cl.GenerateAuthTokens(ctx, &pb.AuthTokensRequest{Username: input.Username, Password: input.Password})
 	if err != nil {
 		fmt.Print(err)
-		return nil, fmt.Errorf("could not say hello: %v", err)
+		return nil, fmt.Errorf("could not create tokens: %v", err)
 	}
 
     return &model.AuthPayload{
