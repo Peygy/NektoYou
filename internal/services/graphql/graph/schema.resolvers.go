@@ -17,7 +17,7 @@ import (
 func (r *mutationResolver) RegisterUser(ctx context.Context, input model.UserInput) (*model.AuthPayload, error) {
 	authConnIdx := sort.Search(len(r.GrpcServices), func(i int) bool { return r.GrpcServices[i].Name == "auth_service" })
 	cl := pb.NewSignInServiceClient(r.GrpcServices[authConnIdx].Conn)
-
+	
 	responce, err := cl.GeneratePairOfTokens(ctx, &pb.SignInRequest{Username: input.Username, Password: input.Password})
 	if err != nil {
 		fmt.Print(err)

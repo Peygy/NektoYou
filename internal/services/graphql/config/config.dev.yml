@@ -1,9 +1,9 @@
 gin:
-  port: "4000"
+  port: ":4000"
   host: "localhost"
 
 grpc-client:
   services:
     - name: "auth_service"
-      port: "5101"
+      port: ":5101"
       host: "localhost"

@@ -3,12 +3,13 @@ module github.com/peygy/nektoyou/internal/services/auth_service
 go 1.23
 
 require (
-	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240826093212-14901e1721d5
+	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240826102629-2eddf9325c5f
 	go.uber.org/fx v1.22.2
 )
 
 require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect

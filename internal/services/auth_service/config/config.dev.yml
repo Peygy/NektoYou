@@ -1,5 +1,5 @@
 grpc-server:
-  port: "5101"
+  port: ":5101"
   host: "localhost"
 token-manager:
   secretKey: "secret-key"
