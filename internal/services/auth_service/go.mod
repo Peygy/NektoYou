@@ -3,7 +3,7 @@ module github.com/peygy/nektoyou/internal/services/auth_service
 go 1.23
 
 require (
-	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240825120334-1d48c9f6f250
+	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240825161455-d828c1435dff
 	go.uber.org/fx v1.22.2
 )
 
@@ -29,6 +29,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	go.uber.org/dig v1.18.0 // indirect

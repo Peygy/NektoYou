@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/peygy/nektoyou/internal/services/graphql/graph/model"
 	pb "github.com/peygy/nektoyou/internal/pkg/protos/graph_auth"
+	"github.com/peygy/nektoyou/internal/services/graphql/graph/model"
 )
 
 // RegisterUser is the resolver for the registerUser field.
@@ -24,10 +24,10 @@ func (r *mutationResolver) RegisterUser(ctx context.Context, input model.UserInp
 		return nil, fmt.Errorf("could not create tokens: %v", err)
 	}
 
-    return &model.AuthPayload{
-        AccessToken:  responce.GetMessage(),
-        RefreshToken: responce.GetMessage(),
-    }, nil
+	return &model.AuthPayload{
+		AccessToken:  responce.GetAccessToken(),
+		RefreshToken: responce.GetRefreshToken(),
+	}, nil
 }
 
 // Mutation returns MutationResolver implementation.

@@ -1,5 +1,5 @@
 gin:
-  port: "8081"
+  port: "4000"
   host: "localhost"
 
 grpc-client:

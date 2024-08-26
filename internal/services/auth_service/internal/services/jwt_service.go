@@ -1,24 +1,24 @@
 package services
 
-import (
-	"context"
+import "time"
 
-	pb "github.com/peygy/nektoyou/internal/pkg/protos/graph_auth"
-)
-
-type grpcServer struct {
-	pb.UnimplementedTokensGeneraterServer
+type TokenManager interface {
+	NewAccessToken(userId string, ttl time.Duration) (string, error)
+	NewRefreshToken() (string, error)
 }
 
-func (s *grpcServer) GenerateAuthTokens(ctx context.Context, in *pb.AuthTokensRequest) (*pb.AuthTokensResponce, error) {
-
-	return &pb.AuthTokensResponce{}, nil
+type Manager struct {
+	secretKey string
 }
 
-func generateJwtAccessToken() {
+func NewManager() {
+	return
+}
+
+func (m *Manager) NewAccessToken(userId string, ttl time.Duration) (string, error) {
 
 }
 
-func generateRefreshToken() {
-	
+func (m *Manager) NewRefreshToken() (string, error) {
+
 }
