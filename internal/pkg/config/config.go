@@ -34,7 +34,7 @@ func InitConfig(filePath string) (*Config, error) {
 	return cfg, nil
 }*/
 
-func NewConfig[T any](filePath string, configStruct T) (*T, error) {
+func NewConfig[T any](filePath string) (*T, error) {
 	yamlFile, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err

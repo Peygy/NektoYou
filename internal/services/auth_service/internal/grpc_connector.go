@@ -8,13 +8,13 @@ import (
 )
 
 func InitAuthGrpcServer(server *grpc.GrpcServer) {
-	pb.RegisterTokensGeneraterServer(server.Engine, &grpcServer{})
+	pb.RegisterSignInServiceServer(server.Engine, &grpcServer{})
 }
 
 type grpcServer struct {
-	pb.UnimplementedTokensGeneraterServer
+	pb.UnimplementedSignInServiceServer
 }
 
-func (s *grpcServer) GenerateAuthTokens(ctx context.Context, in *pb.AuthTokensRequest) (*pb.AuthTokensResponce, error) {
-	return &pb.AuthTokensResponce{}, nil
+func (s *grpcServer) GeneratePairOfTokens(ctx context.Context, in *pb.SignInRequest) (*pb.SignInResponce, error) {
+	return &pb.SignInResponce{}, nil
 }

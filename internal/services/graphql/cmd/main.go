@@ -15,7 +15,7 @@ func main () {
 	fx.New(
 		fx.Options(
 			fx.Provide(
-				config.NewConfig,
+				config.NewGraphQLConfig,
 				logger.NewLogger,
 				context.NewContext,
 				gin.NewGinServer,

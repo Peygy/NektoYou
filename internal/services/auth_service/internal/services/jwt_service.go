@@ -8,11 +8,7 @@ type TokenManager interface {
 }
 
 type Manager struct {
-	secretKey string
-}
-
-func NewManager() {
-	return
+	secretKey string `yaml:"secretKey"`
 }
 
 func (m *Manager) NewAccessToken(userId string, ttl time.Duration) (string, error) {

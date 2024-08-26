@@ -8,8 +8,13 @@ import (
 
 const configPath = ".\\config\\config.dev.yml"
 
-func NewConfig() (*config.Config, *gin.GinConfig, *grpc.GrpcClientConfig, error) {
-	cfg, err := config.InitConfig(configPath)
+type GraphQLConfig struct {
+	Gin        *gin.GinConfig         `yaml:"gin"`
+	GrpcClient *grpc.GrpcClientConfig `yaml:"grpc-client"`
+}
+
+func NewGraphQLConfig() (*GraphQLConfig, *gin.GinConfig, *grpc.GrpcClientConfig, error) {
+	cfg, err := config.NewConfig[GraphQLConfig](configPath)
 	if err != nil {
 		return nil, nil, nil, err
 	}
