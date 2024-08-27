@@ -26,14 +26,15 @@ type GrpcPull struct {
 func NewGrpcClient(cfg *GrpcClientConfig, log logger.ILogger) (*GrpcPull, error) {
 	connPull := new(GrpcPull)
 	for _, val := range cfg.Services {
-		conn, err := grpc.NewClient(val.Host+val.Port, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		connection := val.Host+val.Port
+		conn, err := grpc.NewClient(connection, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
-			log.Error("Error while create grpc server" + val.Name + " connection: " + err.Error())
+			log.Error("Error while create grpc server" + val.Name + " connection " + connection + " : " + err.Error())
 			return nil, err
 		}
 
 		connPull.Services = append(connPull.Services, GrpcService{val.Name, conn})
-		log.Info("To grpc pull is added new service: " + val.Name)
+		log.Info("To grpc pull is added new service: " + val.Name + " on connection " + connection)
 	}
 
 	return connPull, nil

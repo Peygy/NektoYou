@@ -1,5 +1,6 @@
 grpc-server:
   port: ":5101"
-  host: "localhost"
+  host: "auth-service"
+
 token-manager:
   secretKey: "secret-key"

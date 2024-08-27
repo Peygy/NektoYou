@@ -25,21 +25,23 @@ func NewGinServer(cfg *GinConfig, log logger.ILogger) *GinServer {
 }
 
 func (s *GinServer) Run(ctx context.Context) error {
+	address := s.Config.Host+s.Config.Port
+
 	go func () {
 		for {
 			select {
 			case <-ctx.Done():
-				s.Log.Info("Shutting down gin on port: " + s.Config.Port)
+				s.Log.Info("Shutting down gin on address: " + address)
 				return
 			}
 		}
 	} ()
 
-	if err := s.Engine.Run(s.Config.Port); err != nil {
-		s.Log.Fatal("Gin server can't be runned on port " + s.Config.Port)
+	if err := s.Engine.Run(address); err != nil {
+		s.Log.Fatal("Gin server can't be runned on address: " + address)
 		return err
 	}
 
-	s.Log.Info("Gin server runned on port " + s.Config.Port)
+	s.Log.Info("Gin server runned on address: " + address)
 	return nil
 }

@@ -1,9 +1,9 @@
 gin:
   port: ":4000"
-  host: "localhost"
+  host: "graphql-server"
 
 grpc-client:
   services:
     - name: "auth_service"
       port: ":5101"
-      host: "auth-server"
+      host: "auth-service"
