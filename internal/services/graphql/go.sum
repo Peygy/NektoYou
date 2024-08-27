@@ -72,6 +72,8 @@ github.com/pelletier/go-toml/v2 v2.2.3 h1:YmeHyLY8mFWbdkNWwpr+qIL2bEqT0o95WSdkNH
 github.com/pelletier/go-toml/v2 v2.2.3/go.mod h1:MfCQTFTvCcUyyvvwm1+G6H/jORL20Xlb6rzQu9GuUkc=
 github.com/peygy/nektoyou/internal/pkg v0.0.0-20240827120821-dbffe51f606e h1:MQfKTkJCf0k70+PRsULB+TpNIYqSyQshajuKNVrzQbg=
 github.com/peygy/nektoyou/internal/pkg v0.0.0-20240827120821-dbffe51f606e/go.mod h1:unDpVC4pSN1tSeiEwNRk1n767yZj2Bnw7AoPiF4nYDg=
+github.com/peygy/nektoyou/internal/pkg v0.0.0-20240827173054-a108dbde24e8 h1:uyrekPBUvIlKsWaMITSuVp71BllkR9i5opP2qsRWEpM=
+github.com/peygy/nektoyou/internal/pkg v0.0.0-20240827173054-a108dbde24e8/go.mod h1:GXq7x20mxpLE91ClQDBzV6vh4k7JzXPpTV1UDP4zLV8=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rogpeppe/go-internal v1.8.0 h1:FCbCCtXNOY3UtUuHUYaghJg4y7Fd14rXifAYUAtL9R8=

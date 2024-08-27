@@ -13,7 +13,7 @@ type GinConfig struct {
 }
 
 type GinServer struct {
-	engine 	*gin.Engine
+	Engine 	*gin.Engine
 	config 	*GinConfig
 	log 	logger.ILogger
 }
@@ -37,7 +37,7 @@ func (s *GinServer) Run(ctx context.Context) error {
 		}
 	} ()
 
-	if err := s.engine.Run(address); err != nil {
+	if err := s.Engine.Run(address); err != nil {
 		s.log.Fatal("Gin server can't be runned on address: " + address)
 		return err
 	}

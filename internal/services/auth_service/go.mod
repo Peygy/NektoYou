@@ -5,7 +5,7 @@ go 1.23
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/lib/pq v1.10.9
-	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240827120821-dbffe51f606e
+	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240827173054-a108dbde24e8
 	go.uber.org/fx v1.22.2
 )
 
