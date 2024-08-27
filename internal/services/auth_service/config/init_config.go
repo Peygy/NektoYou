@@ -5,7 +5,7 @@ import (
 	"github.com/peygy/nektoyou/internal/pkg/grpc"
 )
 
-const configPath = ".\\config\\config.dev.yml"
+const configPath = "./config/config.dev.yml"
 
 type AuthConfig struct {
 	GrpcServer   *grpc.GrpcServerConfig `yaml:"grpc-server"`

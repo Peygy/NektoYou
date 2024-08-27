@@ -6,4 +6,4 @@ grpc-client:
   services:
     - name: "auth_service"
       port: ":5101"
-      host: "localhost"
+      host: "auth-server"

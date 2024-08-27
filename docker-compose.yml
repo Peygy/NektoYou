@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  graphql-server:
+    build: ./internal/services/graphql
+    ports:
+      - "4000:4000"
+    depends_on:
+      - auth-server
+
+  auth-server:
+    build: ./internal/services/auth_service
+    ports:
+      - "5101:5101"
+
+  react-client:
+    build: ./client
+    ports:
+      - "80:80"
+    depends_on:
+      - graphql-server
+      - auth-server

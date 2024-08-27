@@ -6,7 +6,7 @@ import (
 	"github.com/peygy/nektoyou/internal/pkg/grpc"
 )
 
-const configPath = ".\\config\\config.dev.yml"
+const configPath = "./config/config.dev.yml"
 
 type GraphQLConfig struct {
 	Gin        *gin.GinConfig         `yaml:"gin"`
