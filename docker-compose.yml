@@ -7,11 +7,31 @@ services:
       - "4000:4000"
     depends_on:
       - auth-service
+    networks:
+      - microservices-network
 
   auth-service:
     build: ./internal/services/auth_service
     ports:
       - "5101:5101"
+    depends_on:
+      - auth-postgres-db
+    networks:
+      - microservices-network
+      - auth-network
+
+  auth-postgres-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: userdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth-postgres_data:/var/lib/postgresql/data
+    networks:
+      - auth-network
 
   react-client:
     build: ./client
@@ -20,3 +40,10 @@ services:
     depends_on:
       - graphql-server
       - auth-service
+
+volumes:
+  auth-postgres_data:
+
+networks:
+  microservices-network:
+  auth-network:

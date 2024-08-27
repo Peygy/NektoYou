@@ -20,6 +20,7 @@ func main () {
 				context.NewContext,
 				grpc.NewGrpcServer,
 				services.NewManager,
+				services.NewDatabaseConnection,
 			),
 			fx.Invoke(internal.InitAuthGrpcServer),
 			fx.Invoke(server.RunServers),

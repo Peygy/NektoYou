@@ -10,20 +10,18 @@ import (
 	"github.com/peygy/nektoyou/internal/services/auth_service/internal/services"
 )
 
-func InitAuthGrpcServer(server *grpc.GrpcServer, tokenManager *services.Manager, logger logger.ILogger) {
+func InitAuthGrpcServer(server *grpc.GrpcServer, tokenManager services.ITokenManager, logger logger.ILogger) {
 	grpcServer := &grpcServer{tokenManager: tokenManager, logger: logger}
 	pb.RegisterSignInServiceServer(server.Engine, grpcServer)
 }
 
 type grpcServer struct {
 	pb.UnimplementedSignInServiceServer
-	tokenManager services.TokenManager
+	tokenManager services.ITokenManager
 	logger       logger.ILogger
 }
 
 func (s *grpcServer) GeneratePairOfTokens(ctx context.Context, in *pb.SignInRequest) (*pb.SignInResponce, error) {
-	s.logger.Info(in.Username+" "+in.Password)
-
 	at, err := s.tokenManager.NewAccessToken(in.Username, time.Minute*5)
 	if err != nil {
 		s.logger.Error("error during creation of access token: " + err.Error())

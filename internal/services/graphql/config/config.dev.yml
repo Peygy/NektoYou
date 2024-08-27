@@ -1,6 +1,6 @@
 gin:
   port: ":4000"
-  host: "graphql-server"
+  host: ""
 
 grpc-client:
   services:

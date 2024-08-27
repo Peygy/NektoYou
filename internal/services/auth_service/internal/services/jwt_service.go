@@ -10,21 +10,21 @@ import (
 	"github.com/peygy/nektoyou/internal/services/auth_service/config"
 )
 
-type TokenManager interface {
+type ITokenManager interface {
 	NewAccessToken(userId string, ttl time.Duration) (string, error)
 	NewRefreshToken() (string, error)
 }
 
-type Manager struct {
+type manager struct {
 	secretKey string
 	logger    logger.ILogger
 }
 
-func NewManager(tknCfg *config.TokenManagerConfig, logger logger.ILogger) *Manager {
-	return &Manager{secretKey: tknCfg.SecretKey, logger: logger}
+func NewManager(tknCfg *config.TokenManagerConfig, logger logger.ILogger) ITokenManager {
+	return &manager{secretKey: tknCfg.SecretKey, logger: logger}
 }
 
-func (m *Manager) NewAccessToken(userId string, ttl time.Duration) (string, error) {
+func (m *manager) NewAccessToken(userId string, ttl time.Duration) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		ExpiresAt: time.Now().Add(ttl).Unix(),
 		Subject:   userId,
@@ -33,7 +33,7 @@ func (m *Manager) NewAccessToken(userId string, ttl time.Duration) (string, erro
 	return token.SignedString([]byte(m.secretKey))
 }
 
-func (m *Manager) NewRefreshToken() (string, error) {
+func (m *manager) NewRefreshToken() (string, error) {
 	buffer := make([]byte, 32)
 
 	s := rand.NewSource(time.Now().Unix())

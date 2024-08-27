@@ -17,8 +17,8 @@ type GrpcServerConfig struct {
 
 type GrpcServer struct {
 	Engine *grpc.Server
-	Config *GrpcServerConfig
-	Log    logger.ILogger
+	config *GrpcServerConfig
+	log    logger.ILogger
 }
 
 const (
@@ -42,11 +42,11 @@ func NewGrpcServer(cfg *GrpcServerConfig, log logger.ILogger) *GrpcServer {
 }
 
 func (s *GrpcServer) Run(ctx context.Context) error {
-	address := s.Config.Host+s.Config.Port
+	address := s.config.Host+s.config.Port
 
 	listen, err := net.Listen("tcp", address)
 	if err != nil {
-		s.Log.Fatal("Grpc server can't be runned on address: " + address)
+		s.log.Fatal("Grpc server can't be runned on address: " + address)
 		return err
 	}
 
@@ -54,19 +54,19 @@ func (s *GrpcServer) Run(ctx context.Context) error {
 		for {
 			select {
 			case <-ctx.Done():
-				s.Log.Info("Shutting down Grpc on address: " + address)
+				s.log.Info("Shutting down Grpc on address: " + address)
 				s.shutdown()
-				s.Log.Info("Grpc exited properly")
+				s.log.Info("Grpc exited properly")
 				return
 			}
 		}
 	}()
 
-	s.Log.Info("Grpc server is listening on address: " + address)
+	s.log.Info("Grpc server is listening on address: " + address)
 
 	err = s.Engine.Serve(listen)
 	if err != nil {
-		s.Log.Error("Grpc server error: " + err.Error())
+		s.log.Error("Grpc server error: " + err.Error())
 	}
 
 	return nil
