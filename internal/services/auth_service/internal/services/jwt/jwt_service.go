@@ -1,4 +1,4 @@
-package services
+package jwt
 
 import (
 	"fmt"
@@ -15,16 +15,16 @@ type ITokenManager interface {
 	NewRefreshToken() (string, error)
 }
 
-type manager struct {
+type tokenManager struct {
 	secretKey string
 	logger    logger.ILogger
 }
 
-func NewManager(tknCfg *config.TokenManagerConfig, logger logger.ILogger) ITokenManager {
-	return &manager{secretKey: tknCfg.SecretKey, logger: logger}
+func NewTokenManager(tknCfg *config.TokenManagerConfig, logger logger.ILogger) ITokenManager {
+	return &tokenManager{secretKey: tknCfg.SecretKey, logger: logger}
 }
 
-func (m *manager) NewAccessToken(userId string, ttl time.Duration) (string, error) {
+func (m *tokenManager) NewAccessToken(userId string, ttl time.Duration) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		ExpiresAt: time.Now().Add(ttl).Unix(),
 		Subject:   userId,
@@ -33,7 +33,7 @@ func (m *manager) NewAccessToken(userId string, ttl time.Duration) (string, erro
 	return token.SignedString([]byte(m.secretKey))
 }
 
-func (m *manager) NewRefreshToken() (string, error) {
+func (m *tokenManager) NewRefreshToken() (string, error) {
 	buffer := make([]byte, 32)
 
 	s := rand.NewSource(time.Now().Unix())

@@ -9,7 +9,7 @@ import (
 )
 
 func RunServers(lc fx.Lifecycle, ctx context.Context, log logger.ILogger, gin *gin.GinServer) error {
-	lc.Append(fx.Hook {
+	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
 			go func() {
 				if err := gin.Run(ctx); err != nil {

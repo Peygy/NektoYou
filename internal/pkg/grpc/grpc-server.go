@@ -42,7 +42,7 @@ func NewGrpcServer(cfg *GrpcServerConfig, log logger.ILogger) *GrpcServer {
 }
 
 func (s *GrpcServer) Run(ctx context.Context) error {
-	address := s.config.Host+s.config.Port
+	address := s.config.Host + s.config.Port
 
 	listen, err := net.Listen("tcp", address)
 	if err != nil {

@@ -7,17 +7,24 @@ import (
 	"github.com/peygy/nektoyou/internal/pkg/grpc"
 	"github.com/peygy/nektoyou/internal/pkg/logger"
 	pb "github.com/peygy/nektoyou/internal/pkg/protos/graph_auth"
-	"github.com/peygy/nektoyou/internal/services/auth_service/internal/services"
+	"github.com/peygy/nektoyou/internal/services/auth_service/internal/managers"
+	"github.com/peygy/nektoyou/internal/services/auth_service/internal/services/jwt"
 )
 
-func InitAuthGrpcServer(server *grpc.GrpcServer, tokenManager services.ITokenManager, logger logger.ILogger) {
-	grpcServer := &grpcServer{tokenManager: tokenManager, logger: logger}
+func InitAuthGrpcServer(
+	server *grpc.GrpcServer,
+	tokenManager jwt.ITokenManager,
+	userManager managers.IUserManager,
+	logger logger.ILogger) {
+	grpcServer := &grpcServer{tokenManager: tokenManager, userManager: userManager, logger: logger}
 	pb.RegisterSignInServiceServer(server.Engine, grpcServer)
 }
 
 type grpcServer struct {
 	pb.UnimplementedSignInServiceServer
-	tokenManager services.ITokenManager
+	tokenManager jwt.ITokenManager
+	roleManager  managers.IRoleManager
+	userManager  managers.IUserManager
 	logger       logger.ILogger
 }
 

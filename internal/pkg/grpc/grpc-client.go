@@ -26,7 +26,7 @@ type GrpcPull struct {
 func NewGrpcClient(cfg *GrpcClientConfig, log logger.ILogger) (*GrpcPull, error) {
 	connPull := new(GrpcPull)
 	for _, val := range cfg.Services {
-		connection := val.Host+val.Port
+		connection := val.Host + val.Port
 		conn, err := grpc.NewClient(connection, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			log.Error("Error while create grpc server" + val.Name + " connection " + connection + " : " + err.Error())

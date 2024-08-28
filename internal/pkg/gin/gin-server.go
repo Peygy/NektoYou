@@ -13,21 +13,21 @@ type GinConfig struct {
 }
 
 type GinServer struct {
-	Engine 	*gin.Engine
-	config 	*GinConfig
-	log 	logger.ILogger
+	Engine *gin.Engine
+	config *GinConfig
+	log    logger.ILogger
 }
 
 func NewGinServer(cfg *GinConfig, log logger.ILogger) *GinServer {
 	log.Info("Gin engine is created")
 	ginEngine := gin.Default()
-	return &GinServer{ ginEngine, cfg, log }
+	return &GinServer{ginEngine, cfg, log}
 }
 
 func (s *GinServer) Run(ctx context.Context) error {
-	address := s.config.Host+s.config.Port
+	address := s.config.Host + s.config.Port
 
-	go func () {
+	go func() {
 		for {
 			select {
 			case <-ctx.Done():
@@ -35,7 +35,7 @@ func (s *GinServer) Run(ctx context.Context) error {
 				return
 			}
 		}
-	} ()
+	}()
 
 	if err := s.Engine.Run(address); err != nil {
 		s.log.Fatal("Gin server can't be runned on address: " + address)

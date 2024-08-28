@@ -5,12 +5,12 @@ import (
 
 	"github.com/peygy/nektoyou/internal/pkg/grpc"
 	"github.com/peygy/nektoyou/internal/pkg/logger"
-	"github.com/peygy/nektoyou/internal/services/auth_service/internal/services"
+	"github.com/peygy/nektoyou/internal/services/auth_service/internal/services/data"
 	"go.uber.org/fx"
 )
 
-func RunServers(lc fx.Lifecycle, ctx context.Context, log logger.ILogger, grpc *grpc.GrpcServer, db *services.DatabaseServer) error {
-	lc.Append(fx.Hook {
+func RunServers(lc fx.Lifecycle, ctx context.Context, log logger.ILogger, grpc *grpc.GrpcServer, db data.IDatabaseServer) error {
+	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
 			go func() {
 				if err := grpc.Run(ctx); err != nil {

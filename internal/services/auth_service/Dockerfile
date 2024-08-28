@@ -14,7 +14,8 @@ FROM alpine
 WORKDIR /build
 
 COPY --from=builder /app/main /build/main
-COPY --from=builder /app/config/config.dev.yml /build/config/config.dev.yml
+COPY --from=builder /app/config/*.yml /build/config/
+COPY --from=builder /app/config/*.sql /build/config/
 
 EXPOSE 5101
 
