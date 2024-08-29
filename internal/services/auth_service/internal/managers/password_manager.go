@@ -26,8 +26,8 @@ func newPasswordManager(minLen int, log logger.ILogger) iPasswordManager {
 func (p passwordManager) hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
-		p.log.Warn(err.Error())
-		return "", errors.New("Can't hash password: " + err.Error())
+		p.log.Warnf("Can't create hashed password with error: %v", err)
+		return "", errors.New("managers-password: can't create hashed password")
 	}
 	return string(bytes), nil
 }
@@ -35,7 +35,7 @@ func (p passwordManager) hashPassword(password string) (string, error) {
 func (p passwordManager) validPassword(password string) error {
 	if len(password) < p.minLen {
 		p.log.Warn("Password length less than minimum length")
-		return errors.New("User password is not valid: password length less than " + strconv.Itoa(p.minLen))
+		return errors.New("managers-password: user password is not valid: password length less than " + strconv.Itoa(p.minLen))
 	}
 
 	return nil

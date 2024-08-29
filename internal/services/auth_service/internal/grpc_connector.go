@@ -17,18 +17,18 @@ func InitAuthGrpcServer(
 	userManager managers.IUserManager,
 	logger logger.ILogger) {
 	grpcServer := &grpcServer{tokenManager: tokenManager, userManager: userManager, logger: logger}
-	pb.RegisterSignInServiceServer(server.Engine, grpcServer)
+	pb.RegisterSignUpServiceServer(server.Engine, grpcServer)
 }
 
 type grpcServer struct {
-	pb.UnimplementedSignInServiceServer
+	pb.UnimplementedSignUpServiceServer
 	tokenManager jwt.ITokenManager
 	roleManager  managers.IRoleManager
 	userManager  managers.IUserManager
 	logger       logger.ILogger
 }
 
-func (s *grpcServer) GeneratePairOfTokens(ctx context.Context, in *pb.SignInRequest) (*pb.SignInResponce, error) {
+func (s *grpcServer) SignIn(ctx context.Context, in *pb.SignUpRequest) (*pb.SignUpResponce, error) {
 	at, err := s.tokenManager.NewAccessToken(in.Username, time.Minute*5)
 	if err != nil {
 		s.logger.Error("error during creation of access token: " + err.Error())
@@ -41,5 +41,5 @@ func (s *grpcServer) GeneratePairOfTokens(ctx context.Context, in *pb.SignInRequ
 		return nil, err
 	}
 
-	return &pb.SignInResponce{AccessToken: at, RefreshToken: rt}, nil
+	return &pb.SignUpResponce{AccessToken: at, RefreshToken: rt}, nil
 }

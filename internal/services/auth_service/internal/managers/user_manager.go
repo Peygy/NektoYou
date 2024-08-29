@@ -2,6 +2,7 @@ package managers
 
 import (
 	"database/sql"
+	"errors"
 
 	"github.com/peygy/nektoyou/internal/pkg/logger"
 )
@@ -58,8 +59,8 @@ func (um *userManger) AddUser(user UserRecord) (string, error) {
 	var userId string
 	query := `INSERT INTO users (username, password_hash) VALUES ($1, $2) RETURNING id`
 	if err := um.db.QueryRow(query, user.UserName, hashedPassword).Scan(&userId); err != nil {
-		um.log.Error("Error during adding new user: " + err.Error())
-		return "", err
+		um.log.Errorf("Can't adds new user (%s, %s) to the database: %v", user.UserName, hashedPassword, err)
+		return "", errors.New("managers-user: can't creates user in the database")
 	}
 
 	return userId, nil
