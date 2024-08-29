@@ -19,101 +19,101 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SignInService_GeneratePairOfTokens_FullMethodName = "/graph_auth.SignInService/GeneratePairOfTokens"
+	SignUpService_SignIn_FullMethodName = "/graph_auth.SignUpService/SignIn"
 )
 
-// SignInServiceClient is the client API for SignInService service.
+// SignUpServiceClient is the client API for SignUpService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type SignInServiceClient interface {
-	GeneratePairOfTokens(ctx context.Context, in *SignInRequest, opts ...grpc.CallOption) (*SignInResponce, error)
+type SignUpServiceClient interface {
+	SignIn(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponce, error)
 }
 
-type signInServiceClient struct {
+type signUpServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewSignInServiceClient(cc grpc.ClientConnInterface) SignInServiceClient {
-	return &signInServiceClient{cc}
+func NewSignUpServiceClient(cc grpc.ClientConnInterface) SignUpServiceClient {
+	return &signUpServiceClient{cc}
 }
 
-func (c *signInServiceClient) GeneratePairOfTokens(ctx context.Context, in *SignInRequest, opts ...grpc.CallOption) (*SignInResponce, error) {
+func (c *signUpServiceClient) SignIn(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponce, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SignInResponce)
-	err := c.cc.Invoke(ctx, SignInService_GeneratePairOfTokens_FullMethodName, in, out, cOpts...)
+	out := new(SignUpResponce)
+	err := c.cc.Invoke(ctx, SignUpService_SignIn_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// SignInServiceServer is the server API for SignInService service.
-// All implementations must embed UnimplementedSignInServiceServer
+// SignUpServiceServer is the server API for SignUpService service.
+// All implementations must embed UnimplementedSignUpServiceServer
 // for forward compatibility.
-type SignInServiceServer interface {
-	GeneratePairOfTokens(context.Context, *SignInRequest) (*SignInResponce, error)
-	mustEmbedUnimplementedSignInServiceServer()
+type SignUpServiceServer interface {
+	SignIn(context.Context, *SignUpRequest) (*SignUpResponce, error)
+	mustEmbedUnimplementedSignUpServiceServer()
 }
 
-// UnimplementedSignInServiceServer must be embedded to have
+// UnimplementedSignUpServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedSignInServiceServer struct{}
+type UnimplementedSignUpServiceServer struct{}
 
-func (UnimplementedSignInServiceServer) GeneratePairOfTokens(context.Context, *SignInRequest) (*SignInResponce, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GeneratePairOfTokens not implemented")
+func (UnimplementedSignUpServiceServer) SignIn(context.Context, *SignUpRequest) (*SignUpResponce, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SignIn not implemented")
 }
-func (UnimplementedSignInServiceServer) mustEmbedUnimplementedSignInServiceServer() {}
-func (UnimplementedSignInServiceServer) testEmbeddedByValue()                       {}
+func (UnimplementedSignUpServiceServer) mustEmbedUnimplementedSignUpServiceServer() {}
+func (UnimplementedSignUpServiceServer) testEmbeddedByValue()                       {}
 
-// UnsafeSignInServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to SignInServiceServer will
+// UnsafeSignUpServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SignUpServiceServer will
 // result in compilation errors.
-type UnsafeSignInServiceServer interface {
-	mustEmbedUnimplementedSignInServiceServer()
+type UnsafeSignUpServiceServer interface {
+	mustEmbedUnimplementedSignUpServiceServer()
 }
 
-func RegisterSignInServiceServer(s grpc.ServiceRegistrar, srv SignInServiceServer) {
-	// If the following call pancis, it indicates UnimplementedSignInServiceServer was
+func RegisterSignUpServiceServer(s grpc.ServiceRegistrar, srv SignUpServiceServer) {
+	// If the following call pancis, it indicates UnimplementedSignUpServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&SignInService_ServiceDesc, srv)
+	s.RegisterService(&SignUpService_ServiceDesc, srv)
 }
 
-func _SignInService_GeneratePairOfTokens_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SignInRequest)
+func _SignUpService_SignIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignUpRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SignInServiceServer).GeneratePairOfTokens(ctx, in)
+		return srv.(SignUpServiceServer).SignIn(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: SignInService_GeneratePairOfTokens_FullMethodName,
+		FullMethod: SignUpService_SignIn_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SignInServiceServer).GeneratePairOfTokens(ctx, req.(*SignInRequest))
+		return srv.(SignUpServiceServer).SignIn(ctx, req.(*SignUpRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// SignInService_ServiceDesc is the grpc.ServiceDesc for SignInService service.
+// SignUpService_ServiceDesc is the grpc.ServiceDesc for SignUpService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var SignInService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "graph_auth.SignInService",
-	HandlerType: (*SignInServiceServer)(nil),
+var SignUpService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "graph_auth.SignUpService",
+	HandlerType: (*SignUpServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GeneratePairOfTokens",
-			Handler:    _SignInService_GeneratePairOfTokens_Handler,
+			MethodName: "SignIn",
+			Handler:    _SignUpService_SignIn_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

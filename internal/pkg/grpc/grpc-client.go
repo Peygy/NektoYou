@@ -29,12 +29,12 @@ func NewGrpcClient(cfg *GrpcClientConfig, log logger.ILogger) (*GrpcPull, error)
 		connection := val.Host + val.Port
 		conn, err := grpc.NewClient(connection, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
-			log.Error("Error while create grpc server" + val.Name + " connection " + connection + " : " + err.Error())
+			log.Errorf("Can't create grpc client %s on connection %s with error: %v", val.Name, connection, err)
 			return nil, err
 		}
 
 		connPull.Services = append(connPull.Services, GrpcService{val.Name, conn})
-		log.Info("To grpc pull is added new service: " + val.Name + " on connection " + connection)
+		log.Infof("To grpc pull is added new service: %s on connection %s", val.Name, connection)
 	}
 
 	return connPull, nil

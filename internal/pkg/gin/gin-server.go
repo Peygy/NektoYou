@@ -31,17 +31,17 @@ func (s *GinServer) Run(ctx context.Context) error {
 		for {
 			select {
 			case <-ctx.Done():
-				s.log.Info("Shutting down gin on address: " + address)
+				s.log.Infof("Gin shutting down gin on address: %s", address)
 				return
 			}
 		}
 	}()
 
 	if err := s.Engine.Run(address); err != nil {
-		s.log.Fatal("Gin server can't be runned on address: " + address)
+		s.log.Fatalf("Gin server can't be runned on address %s with error %v", address, err)
 		return err
 	}
 
-	s.log.Info("Gin server runned on address: " + address)
+	s.log.Infof("Gin server runned on address: %s", address)
 	return nil
 }

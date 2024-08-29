@@ -16,7 +16,7 @@ func NewContext(log logger.ILogger) context.Context {
 		for {
 			select {
 			case <-ctx.Done():
-				log.Info("context is canceled!")
+				log.Info("Context is canceled!")
 				cancel()
 				return
 			}

@@ -46,7 +46,7 @@ func (s *GrpcServer) Run(ctx context.Context) error {
 
 	listen, err := net.Listen("tcp", address)
 	if err != nil {
-		s.log.Fatal("Grpc server can't be runned on address: " + address)
+		s.log.Fatalf("Grpc server can't be runned on address: %s", address)
 		return err
 	}
 
@@ -54,7 +54,7 @@ func (s *GrpcServer) Run(ctx context.Context) error {
 		for {
 			select {
 			case <-ctx.Done():
-				s.log.Info("Shutting down Grpc on address: " + address)
+				s.log.Infof("Shutting down grpc server on address: ", address)
 				s.shutdown()
 				s.log.Info("Grpc exited properly")
 				return
@@ -62,11 +62,12 @@ func (s *GrpcServer) Run(ctx context.Context) error {
 		}
 	}()
 
-	s.log.Info("Grpc server is listening on address: " + address)
+	s.log.Infof("Grpc server is listening on address: %s", address)
 
 	err = s.Engine.Serve(listen)
 	if err != nil {
-		s.log.Error("Grpc server error: " + err.Error())
+		s.log.Fatalf("Grpc server can't server connection with error: %v", err)
+		return err
 	}
 
 	return nil
