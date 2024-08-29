@@ -5,16 +5,32 @@ import (
 )
 
 type ILogger interface {
-	Info(msg string, fields ...zap.Field)
-	Error(msg string, fields ...zap.Field)
-	Debug(msg string, fields ...zap.Field)
-	Warn(msg string, fields ...zap.Field)
-	Fatal(msg string, fields ...zap.Field)
-	Sync()
+	Debug(args ...interface{})
+	Debugf(template string, args ...interface{})
+
+	Info(args ...interface{})
+	Infof(template string, args ...interface{})
+
+	Warn(args ...interface{})
+	Warnf(template string, args ...interface{})
+
+	Error(args ...interface{})
+	Errorf(template string, args ...interface{})
+
+	DPanic(args ...interface{})
+	DPanicf(template string, args ...interface{})
+
+	Panic(args ...interface{})
+	Panicf(template string, args ...interface{})
+
+	Fatal(args ...interface{})
+	Fatalf(template string, args ...interface{})
+
+	Sync() error
 }
 
 type appLogger struct {
-	zapLogger *zap.Logger
+	*zap.SugaredLogger
 }
 
 func NewLogger() (ILogger, error) {
@@ -22,29 +38,7 @@ func NewLogger() (ILogger, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &appLogger{zapLogger: zapLogger}, nil
-}
+	sugaredLogger := zapLogger.Sugar()
 
-func (l *appLogger) Info(msg string, fields ...zap.Field) {
-	l.zapLogger.Info(msg, fields...)
-}
-
-func (l *appLogger) Error(msg string, fields ...zap.Field) {
-	l.zapLogger.Error(msg, fields...)
-}
-
-func (l *appLogger) Debug(msg string, fields ...zap.Field) {
-	l.zapLogger.Debug(msg, fields...)
-}
-
-func (l *appLogger) Warn(msg string, fields ...zap.Field) {
-	l.zapLogger.Warn(msg, fields...)
-}
-
-func (l *appLogger) Fatal(msg string, fields ...zap.Field) {
-	l.zapLogger.Fatal(msg, fields...)
-}
-
-func (l *appLogger) Sync() {
-	l.zapLogger.Sync()
+	return &appLogger{sugaredLogger}, nil
 }

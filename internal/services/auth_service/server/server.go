@@ -27,6 +27,8 @@ func RunServers(lc fx.Lifecycle, ctx context.Context, log logger.ILogger, grpc *
 			return nil
 		},
 		OnStop: func(_ context.Context) error {
+			log.Info("Logger buffer is flushed...")
+			log.Sync()
 			log.Info("All servers shutdown gracefully...")
 			return nil
 		},
