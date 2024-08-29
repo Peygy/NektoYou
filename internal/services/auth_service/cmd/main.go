@@ -25,9 +25,9 @@ func main() {
 				jwt.NewTokenManager,
 				data.NewDatabaseConnection,
 
-				managers.NewUserManager,
 				managers.NewRoleManager,
 				managers.NewRefreshManager,
+				managers.NewUserManager,
 			),
 			fx.Invoke(data.InitDatabaseSchema),
 			fx.Invoke(internal.InitAuthGrpcServer),

@@ -16,9 +16,9 @@ import (
 // RegisterUser is the resolver for the registerUser field.
 func (r *mutationResolver) RegisterUser(ctx context.Context, input model.UserInput) (*model.AuthPayload, error) {
 	authConnIdx := sort.Search(len(r.GrpcServices), func(i int) bool { return r.GrpcServices[i].Name == "auth_service" })
-	cl := pb. NewSignUpServiceClient(r.GrpcServices[authConnIdx].Conn)
+	cl := pb.NewSignUpServiceClient(r.GrpcServices[authConnIdx].Conn)
 
-	responce, err := cl.SignIn(ctx, &pb.SignUpRequest{Username: input.Username, Password: input.Password})
+	responce, err := cl.SignUp(ctx, &pb.SignUpRequest{Username: input.Username, Password: input.Password})
 	if err != nil {
 		fmt.Print(err)
 		return nil, fmt.Errorf("could not create tokens: %v", err)

@@ -14,30 +14,59 @@ import (
 func InitAuthGrpcServer(
 	server *grpc.GrpcServer,
 	tokenManager jwt.ITokenManager,
+	roleManager managers.IRoleManager,
 	userManager managers.IUserManager,
+	refreshManager managers.IRefreshManager,
 	logger logger.ILogger) {
-	grpcServer := &grpcServer{tokenManager: tokenManager, userManager: userManager, logger: logger}
+	grpcServer := &grpcServer{
+		tokenManager:   tokenManager,
+		roleManager:    roleManager,
+		userManager:    userManager,
+		refreshManager: refreshManager,
+		logger:         logger,
+	}
 	pb.RegisterSignUpServiceServer(server.Engine, grpcServer)
+
+	logger.Info("Initialize of grpc server successfully")
 }
 
 type grpcServer struct {
 	pb.UnimplementedSignUpServiceServer
-	tokenManager jwt.ITokenManager
-	roleManager  managers.IRoleManager
-	userManager  managers.IUserManager
-	logger       logger.ILogger
+
+	tokenManager   jwt.ITokenManager
+	roleManager    managers.IRoleManager
+	userManager    managers.IUserManager
+	refreshManager managers.IRefreshManager
+
+	logger logger.ILogger
 }
 
-func (s *grpcServer) SignIn(ctx context.Context, in *pb.SignUpRequest) (*pb.SignUpResponce, error) {
-	at, err := s.tokenManager.NewAccessToken(in.Username, time.Minute*5)
+func (s *grpcServer) SignUp(ctx context.Context, in *pb.SignUpRequest) (*pb.SignUpResponce, error) {
+	user := managers.UserRecord{UserName: in.Username, Password: in.Password}
+	userId, err := s.userManager.AddUser(user)
 	if err != nil {
-		s.logger.Error("error during creation of access token: " + err.Error())
+		return nil, err
+	}
+
+	err = s.roleManager.AddRolesToUser(userId, "user")
+	if err != nil {
 		return nil, err
 	}
 
 	rt, err := s.tokenManager.NewRefreshToken()
 	if err != nil {
 		s.logger.Error("error during creation of refresh token: " + err.Error())
+		return nil, err
+	}
+
+	err = s.refreshManager.AddToken(userId, rt)
+	if err != nil {
+		return nil, err
+	}
+
+	at, err := s.tokenManager.NewAccessToken(userId, time.Minute*5)
+	if err != nil {
+		s.logger.Error("error during creation of access token: " + err.Error())
 		return nil, err
 	}
 

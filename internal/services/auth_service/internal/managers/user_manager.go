@@ -39,6 +39,7 @@ type userManger struct {
 func NewUserManager(db *sql.DB, log logger.ILogger) IUserManager {
 	passwordManager := newPasswordManager(7, log)
 
+	defer log.Infof("UserManager created")
 	return &userManger{
 		iPasswordManager: passwordManager,
 		db:               db,
@@ -63,6 +64,7 @@ func (um *userManger) AddUser(user UserRecord) (string, error) {
 		return "", errors.New("managers-user: can't creates user in the database")
 	}
 
+	um.log.Infof("User %s created successfully", userId)
 	return userId, nil
 }
 

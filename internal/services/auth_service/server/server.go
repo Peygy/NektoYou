@@ -24,6 +24,7 @@ func RunServers(lc fx.Lifecycle, ctx context.Context, log logger.ILogger, grpc *
 				}
 			}()
 
+			log.Info("Services are launched")
 			return nil
 		},
 		OnStop: func(_ context.Context) error {

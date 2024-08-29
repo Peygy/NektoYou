@@ -8,7 +8,7 @@ import (
 )
 
 type IRefreshManager interface {
-	AddToken(userId, refreshToken string) (bool, error)
+	AddToken(userId, refreshToken string) error
 	GetToken(userId string) (string, error)
 	RefreshToken(userId, newRefreshToken string) (bool, error)
 }
@@ -19,19 +19,21 @@ type refreshManager struct {
 }
 
 func NewRefreshManager(db *sql.DB, log logger.ILogger) IRefreshManager {
+	defer log.Infof("RefreshManager created")
 	return &refreshManager{db: db, log: log}
 }
 
-func (rm *refreshManager) AddToken(userId, refreshToken string) (bool, error) {
+func (rm *refreshManager) AddToken(userId, refreshToken string) error {
 	query := `INSERT INTO users_tokens (user_id, token) VALUES ($1, $2) ON CONFLICT (token) DO NOTHING`
 
 	_, err := rm.db.Exec(query, userId, refreshToken)
 	if err != nil {
 		rm.log.Errorf("Can't inserts refresh token with error: %v", err)
-		return false, errors.New("managers-refresh: can't inserts refresh token with error")
+		return errors.New("managers-refresh: can't inserts refresh token with error")
 	}
 
-	return true, nil
+	rm.log.Infof("Refresh token %s successfully added to user %s", refreshToken, userId)
+	return nil
 }
 
 func (rm *refreshManager) GetToken(userId string) (string, error) {
@@ -64,6 +66,7 @@ func (rm *refreshManager) RefreshToken(userId, newRefreshToken string) (bool, er
 		rm.log.Errorf("Error starting transaction: %v", err)
 		return false, errors.New("managers-refresh: can't starting transaction")
 	}
+	rm.log.Info("Refresh-Refresh: Transaction is begining successfully")
 	defer tx.Rollback()
 
 	var oldToken string
@@ -79,6 +82,7 @@ func (rm *refreshManager) RefreshToken(userId, newRefreshToken string) (bool, er
 		rm.log.Errorf("Error retrieving old token: ", err)
 		return false, errors.New("managers-refresh: can't retrieving old token")
 	}
+	rm.log.Infof("User's %s refresh token was found", userId)
 
 	updateQuery := `UPDATE users_tokens SET token = $1 WHERE user_id = $2`
 	_, err = tx.Exec(updateQuery, newRefreshToken, userId)
@@ -86,12 +90,13 @@ func (rm *refreshManager) RefreshToken(userId, newRefreshToken string) (bool, er
 		rm.log.Errorf("Error updating token: ", err)
 		return false, errors.New("managers-refresh: can't updating token")
 	}
+	rm.log.Infof("User's %s refresh token updated successfully", userId)
 
-	err = tx.Commit()
-	if err != nil {
+	if err = tx.Commit(); err != nil {
 		rm.log.Errorf("Error committing transaction: ", err)
 		return false, errors.New("managers-refresh: can't committing transaction")
 	}
 
+	rm.log.Info("Refresh-Refresh: Transaction is commited successfully")
 	return true, nil
 }

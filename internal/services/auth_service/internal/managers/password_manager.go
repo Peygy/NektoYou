@@ -20,24 +20,28 @@ type passwordManager struct {
 }
 
 func newPasswordManager(minLen int, log logger.ILogger) iPasswordManager {
+	defer log.Infof("PasswordManager created")
 	return &passwordManager{minLen: minLen, log: log}
 }
 
 func (p passwordManager) hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
-		p.log.Warnf("Can't create hashed password with error: %v", err)
+		p.log.Errorf("Can't create hashed password with error: %v", err)
 		return "", errors.New("managers-password: can't create hashed password")
 	}
+
+	p.log.Info("Password is hased successfully")
 	return string(bytes), nil
 }
 
 func (p passwordManager) validPassword(password string) error {
 	if len(password) < p.minLen {
-		p.log.Warn("Password length less than minimum length")
+		p.log.Error("Password length less than minimum length")
 		return errors.New("managers-password: user password is not valid: password length less than " + strconv.Itoa(p.minLen))
 	}
 
+	p.log.Info("Password is valided")
 	return nil
 }
 
