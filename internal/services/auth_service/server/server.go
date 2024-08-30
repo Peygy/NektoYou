@@ -14,13 +14,13 @@ func RunServers(lc fx.Lifecycle, ctx context.Context, log logger.ILogger, grpc *
 		OnStart: func(_ context.Context) error {
 			go func() {
 				if err := grpc.Run(ctx); err != nil {
-					log.Fatal("Error running grpc server: " + err.Error())
+					log.Fatalf("Error running grpc server: %v", err)
 				}
 			}()
 
 			go func() {
 				if err := db.Run(ctx); err != nil {
-					log.Fatal("Error running database: " + err.Error())
+					log.Fatalf("Error running database: %v", err)
 				}
 			}()
 

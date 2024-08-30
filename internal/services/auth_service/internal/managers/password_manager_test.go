@@ -22,14 +22,18 @@ func randomString(n int) string {
 }
 
 var (
-	_password        = "password123"
-	_mockLog         = new(mocks.LoggerMock)
-	_passwordManager = newPasswordManager(7, _mockLog)
+	_password = "password123"
 )
 
 func TestHashPassword_Success(t *testing.T) {
+	// Arrange
+	mockLog := new(mocks.LoggerMock)
+	mockLog.On("Info", "PasswordManager created").Return()
+	mockLog.On("Info", "Password is hashed successfully").Return()
+
 	// Act
-	hash, err := _passwordManager.hashPassword(_password)
+	passwordManager := newPasswordManager(7, mockLog)
+	hash, err := passwordManager.hashPassword(_password)
 
 	// Assert
 	assert.NoError(t, err, "Expected no error during hashing")
@@ -42,13 +46,14 @@ func TestHashPassword_Success(t *testing.T) {
 func TestHashPassword_Error(t *testing.T) {
 	// Arrange
 	mockLog := new(mocks.LoggerMock)
+	mockLog.On("Info", "PasswordManager created").Return()
 	mockLog.On("Errorf", "Can't create hashed password with error: %v", mock.Anything).Return()
-	_passwordManager = newPasswordManager(7, mockLog)
 
 	password := randomString(73)
 
 	// Act
-	hash, err := _passwordManager.hashPassword(password)
+	passwordManager := newPasswordManager(7, mockLog)
+	hash, err := passwordManager.hashPassword(password)
 
 	// Assert
 	assert.Error(t, err, "Expected an error during hashing")
@@ -56,8 +61,14 @@ func TestHashPassword_Error(t *testing.T) {
 }
 
 func TestValidPassword_Success(t *testing.T) {
+	// Arrange
+	mockLog := new(mocks.LoggerMock)
+	mockLog.On("Info", "PasswordManager created").Return()
+	mockLog.On("Info", "Password is valided").Return()
+
 	// Act
-	err := _passwordManager.validPassword(_password)
+	passwordManager := newPasswordManager(7, mockLog)
+	err := passwordManager.validPassword(_password)
 
 	// Assert
 	assert.NoError(t, err, "Expected no error due to password being too short")
@@ -66,10 +77,11 @@ func TestValidPassword_Success(t *testing.T) {
 func TestValidPassword_Error(t *testing.T) {
 	// Arrange
 	mockLog := new(mocks.LoggerMock)
-	mockLog.On("Error", mock.Anything).Return()
-	passwordManager := newPasswordManager(15, mockLog)
+	mockLog.On("Info", "PasswordManager created").Return()
+	mockLog.On("Error", "Password length less than minimum length").Return()
 
 	// Act
+	passwordManager := newPasswordManager(15, mockLog)
 	err := passwordManager.validPassword(_password)
 
 	// Assert
@@ -78,18 +90,26 @@ func TestValidPassword_Error(t *testing.T) {
 
 func TestCheckPasswordHash_True(t *testing.T) {
 	// Arrange
+	mockLog := new(mocks.LoggerMock)
+	mockLog.On("Info", "PasswordManager created").Return()
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(_password), 14)
 
 	// Act
-	result := _passwordManager.checkPasswordHash(_password, string(bytes))
+	passwordManager := newPasswordManager(7, mockLog)
+	result := passwordManager.checkPasswordHash(_password, string(bytes))
 
 	// Assert
 	assert.True(t, result, "Expected true after comparing passwords")
 }
 
 func TestCheckPasswordHash_False(t *testing.T) {
+	// Arrange
+	mockLog := new(mocks.LoggerMock)
+	mockLog.On("Info", "PasswordManager created").Return()
+
 	// Act
-	result := _passwordManager.checkPasswordHash(_password, string([]byte("test")))
+	passwordManager := newPasswordManager(7, mockLog)
+	result := passwordManager.checkPasswordHash(_password, string([]byte("test")))
 
 	// Assert
 	assert.False(t, result, "Expected false after comparing passwords")

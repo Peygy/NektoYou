@@ -19,7 +19,7 @@ type refreshManager struct {
 }
 
 func NewRefreshManager(db *sql.DB, log logger.ILogger) IRefreshManager {
-	defer log.Infof("RefreshManager created")
+	log.Info("RefreshManager created")
 	return &refreshManager{db: db, log: log}
 }
 
@@ -51,11 +51,7 @@ func (rm *refreshManager) GetToken(userId string) (string, error) {
 		return "", errors.New("managers-refresh: can't gets refresh token")
 	}
 
-	if token == "" {
-		rm.log.Info("Token is empty")
-	} else {
-		rm.log.Info("Token was founded")
-	}
+	rm.log.Info("Token was founded")
 
 	return token, nil
 }
@@ -71,7 +67,6 @@ func (rm *refreshManager) RefreshToken(userId, newRefreshToken string) (bool, er
 
 	var oldToken string
 	query := `SELECT token FROM users_tokens WHERE user_id = $1 FOR UPDATE`
-
 	err = tx.QueryRow(query, userId).Scan(&oldToken)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -79,7 +74,7 @@ func (rm *refreshManager) RefreshToken(userId, newRefreshToken string) (bool, er
 			return false, errors.New("managers-refresh: no any refresh token in database")
 		}
 
-		rm.log.Errorf("Error retrieving old token: ", err)
+		rm.log.Errorf("Error retrieving old token: %v", err)
 		return false, errors.New("managers-refresh: can't retrieving old token")
 	}
 	rm.log.Infof("User's %s refresh token was found", userId)
@@ -87,13 +82,13 @@ func (rm *refreshManager) RefreshToken(userId, newRefreshToken string) (bool, er
 	updateQuery := `UPDATE users_tokens SET token = $1 WHERE user_id = $2`
 	_, err = tx.Exec(updateQuery, newRefreshToken, userId)
 	if err != nil {
-		rm.log.Errorf("Error updating token: ", err)
+		rm.log.Errorf("Error updating token: %v", err)
 		return false, errors.New("managers-refresh: can't updating token")
 	}
 	rm.log.Infof("User's %s refresh token updated successfully", userId)
 
 	if err = tx.Commit(); err != nil {
-		rm.log.Errorf("Error committing transaction: ", err)
+		rm.log.Errorf("Error committing transaction: %v", err)
 		return false, errors.New("managers-refresh: can't committing transaction")
 	}
 

@@ -36,7 +36,7 @@ func NewRoleManager(db *sql.DB, log logger.ILogger) IRoleManager {
 		log.Infof("Role %s inserts successful", role)
 	}
 
-	defer log.Infof("RoleManager created")
+	log.Info("RoleManager created")
 	return &roleManger{db: db, log: log}
 }
 
@@ -49,7 +49,7 @@ func (rm *roleManger) addRoleToUser(userId, role string) error {
 	query := `INSERT INTO users_roles (user_id, role_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`
 	_, err := rm.db.Exec(query, userId, roleId)
 	if err != nil {
-		rm.log.Errorf("Can't inserts role %s to user %s: ", role, userId, err)
+		rm.log.Errorf("Can't inserts role %s to user %s: %v", role, userId, err)
 		return errors.New("managers-role: can't add role " + role + " to the " + userId)
 	}
 
@@ -102,13 +102,13 @@ func (rm *roleManger) deleteRoleFromUser(userId, role string) error {
 }
 
 func (rm *roleManger) DeleteRolesFromUser(userId string, roles ...string) error {
-	rm.log.Info("Role-Add: Transaction is begining")
+	rm.log.Info("Role-Delete: Transaction is begining")
 	tx, err := rm.db.Begin()
 	if err != nil {
 		rm.log.Errorf("Can't starts transaction: %v", err)
 		return errors.New("managers-role: can't starts transaction for deleting roles from user")
 	}
-	rm.log.Info("Role-Add: Transaction is begined successfully")
+	rm.log.Info("Role-Delete: Transaction is begined successfully")
 	defer tx.Rollback()
 
 	for _, role := range roles {
@@ -125,7 +125,7 @@ func (rm *roleManger) DeleteRolesFromUser(userId string, roles ...string) error 
 		return errors.New("managers-role: can't commits transaction for deleting roles from user")
 	}
 
-	rm.log.Info("Role-Add: Transaction is commited successfully")
+	rm.log.Info("Role-Delete: Transaction is commited successfully")
 	return nil
 }
 

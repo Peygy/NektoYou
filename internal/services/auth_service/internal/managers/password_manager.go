@@ -20,7 +20,7 @@ type passwordManager struct {
 }
 
 func newPasswordManager(minLen int, log logger.ILogger) iPasswordManager {
-	defer log.Infof("PasswordManager created")
+	log.Info("PasswordManager created")
 	return &passwordManager{minLen: minLen, log: log}
 }
 
@@ -31,7 +31,7 @@ func (p passwordManager) hashPassword(password string) (string, error) {
 		return "", errors.New("managers-password: can't create hashed password")
 	}
 
-	p.log.Info("Password is hased successfully")
+	p.log.Info("Password is hashed successfully")
 	return string(bytes), nil
 }
 

@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 
@@ -34,12 +35,12 @@ func NewDatabaseConnection(cfg *config.DatabaseConfig, log logger.ILogger) (IDat
 
 	db, err := sql.Open("postgres", psqlconn)
 	if err != nil {
-		log.Fatal("Error during connection " + psqlconn + " to the database: " + err.Error())
+		log.Fatalf("Error during connection %s to the database: %v", psqlconn, err)
 		return nil, nil
 	}
 
 	if err = db.Ping(); err != nil {
-		log.Fatal("Error during ping the database: " + err.Error())
+		log.Fatalf("Error during ping the database: %v", err)
 		return nil, nil
 	}
 
@@ -50,15 +51,15 @@ func NewDatabaseConnection(cfg *config.DatabaseConfig, log logger.ILogger) (IDat
 func InitDatabaseSchema(db *sql.DB, log logger.ILogger) error {
 	sqlBytes, err := os.ReadFile(schemaFilePath)
 	if err != nil {
-		log.Fatal("Error reading SQL file: " + err.Error())
-		return err
+		log.Fatalf("Error reading SQL file: %v", err)
+		return errors.New("data: can't reads SQL config file")
 	}
 	sqlContent := string(sqlBytes)
 
 	_, err = db.Exec(sqlContent)
 	if err != nil {
-		log.Fatal("Error during creation of table: " + err.Error())
-		return err
+		log.Fatalf("Error during creation of table: %v", err)
+		return errors.New("data: can't creates tables in the database")
 	}
 
 	log.Info("Tables users, roles, users_roles, users_tokens created successful")

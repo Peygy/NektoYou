@@ -7,7 +7,7 @@ type LoggerMock struct {
 }
 
 func (m *LoggerMock) Debug(args ...interface{}) {
-	m.Called(args)
+	m.Called(args...)
 }
 
 func (m *LoggerMock) Debugf(template string, args ...interface{}) {
@@ -15,7 +15,7 @@ func (m *LoggerMock) Debugf(template string, args ...interface{}) {
 }
 
 func (m *LoggerMock) Info(args ...interface{}) {
-	m.Called(args)
+	m.Called(args...)
 }
 
 func (m *LoggerMock) Infof(template string, args ...interface{}) {
@@ -23,7 +23,7 @@ func (m *LoggerMock) Infof(template string, args ...interface{}) {
 }
 
 func (m *LoggerMock) Warn(args ...interface{}) {
-	m.Called(args)
+	m.Called(args...)
 }
 
 func (m *LoggerMock) Warnf(template string, args ...interface{}) {
@@ -31,7 +31,7 @@ func (m *LoggerMock) Warnf(template string, args ...interface{}) {
 }
 
 func (m *LoggerMock) Error(args ...interface{}) {
-	m.Called(args)
+	m.Called(args...)
 }
 
 func (m *LoggerMock) Errorf(template string, args ...interface{}) {
@@ -39,7 +39,7 @@ func (m *LoggerMock) Errorf(template string, args ...interface{}) {
 }
 
 func (m *LoggerMock) DPanic(args ...interface{}) {
-	m.Called(args)
+	m.Called(args...)
 }
 
 func (m *LoggerMock) DPanicf(template string, args ...interface{}) {
@@ -47,7 +47,7 @@ func (m *LoggerMock) DPanicf(template string, args ...interface{}) {
 }
 
 func (m *LoggerMock) Panic(args ...interface{}) {
-	m.Called(args)
+	m.Called(args...)
 }
 
 func (m *LoggerMock) Panicf(template string, args ...interface{}) {
@@ -55,7 +55,7 @@ func (m *LoggerMock) Panicf(template string, args ...interface{}) {
 }
 
 func (m *LoggerMock) Fatal(args ...interface{}) {
-	m.Called(args)
+	m.Called(args...)
 }
 
 func (m *LoggerMock) Fatalf(template string, args ...interface{}) {

@@ -23,7 +23,7 @@ func InitAuthGrpcServer(
 		roleManager:    roleManager,
 		userManager:    userManager,
 		refreshManager: refreshManager,
-		logger:         logger,
+		log:            logger,
 	}
 	pb.RegisterSignUpServiceServer(server.Engine, grpcServer)
 
@@ -38,12 +38,12 @@ type grpcServer struct {
 	userManager    managers.IUserManager
 	refreshManager managers.IRefreshManager
 
-	logger logger.ILogger
+	log logger.ILogger
 }
 
 func (s *grpcServer) SignUp(ctx context.Context, in *pb.SignUpRequest) (*pb.SignUpResponce, error) {
 	user := managers.UserRecord{UserName: in.Username, Password: in.Password}
-	userId, err := s.userManager.AddUser(user)
+	userId, err := s.userManager.InsertUser(user)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,6 @@ func (s *grpcServer) SignUp(ctx context.Context, in *pb.SignUpRequest) (*pb.Sign
 
 	rt, err := s.tokenManager.NewRefreshToken()
 	if err != nil {
-		s.logger.Error("error during creation of refresh token: " + err.Error())
 		return nil, err
 	}
 
@@ -66,7 +65,6 @@ func (s *grpcServer) SignUp(ctx context.Context, in *pb.SignUpRequest) (*pb.Sign
 
 	at, err := s.tokenManager.NewAccessToken(userId, time.Minute*5)
 	if err != nil {
-		s.logger.Error("error during creation of access token: " + err.Error())
 		return nil, err
 	}
 

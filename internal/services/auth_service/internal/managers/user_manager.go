@@ -11,7 +11,7 @@ import (
 type IUserManager interface {
 	// Adds new user to the database.
 	// Returns new user id or error.
-	AddUser(user UserRecord) (string, error)
+	InsertUser(user UserRecord) (string, error)
 	// Gets user from the database by id.
 	// Returns user model or error.
 	GetUserById(userId string) (UserRecord, error)
@@ -39,7 +39,7 @@ type userManger struct {
 func NewUserManager(db *sql.DB, log logger.ILogger) IUserManager {
 	passwordManager := newPasswordManager(7, log)
 
-	defer log.Infof("UserManager created")
+	log.Info("UserManager created")
 	return &userManger{
 		iPasswordManager: passwordManager,
 		db:               db,
@@ -47,7 +47,7 @@ func NewUserManager(db *sql.DB, log logger.ILogger) IUserManager {
 	}
 }
 
-func (um *userManger) AddUser(user UserRecord) (string, error) {
+func (um *userManger) InsertUser(user UserRecord) (string, error) {
 	if err := um.validPassword(user.Password); err != nil {
 		return "", err
 	}
