@@ -11,9 +11,15 @@ import (
 	"github.com/peygy/nektoyou/internal/services/auth_service/config"
 )
 
+var (
+	ErrInvalidToken = errors.New("jwt: invalid access token")
+	ErrExpiredToken = errors.New("jwt: expired access token")
+)
+
 type ITokenManager interface {
 	NewAccessToken(userId string, ttl time.Duration, roles ...string) (string, error)
 	NewRefreshToken() (string, error)
+	VerifyAccessToken(accessToken string) (*JwtClaims, error)
 }
 
 type tokenManager struct {
@@ -21,9 +27,9 @@ type tokenManager struct {
 	log       logger.ILogger
 }
 
-type customClaims struct {
-	userId string   `json:"user_id"`
-	roles  []string `json:"roles"`
+type JwtClaims struct {
+	UserId string   `json:"user_id"`
+	Roles  []string `json:"roles"`
 	jwt.StandardClaims
 }
 
@@ -32,14 +38,21 @@ func NewTokenManager(tknCfg *config.TokenManagerConfig, logger logger.ILogger) I
 }
 
 func (m *tokenManager) NewAccessToken(userId string, ttl time.Duration, roles ...string) (string, error) {
-	claims := customClaims{
+	if userId == "" {
+		return "", errors.New("jwt: userId cannot be empty")
+	}
+
+	if ttl <= 0 {
+		return "", errors.New("jwt: token ttl must be greater than zero")
+	}
+
+	claims := JwtClaims{
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(ttl).Unix(),
 			IssuedAt:  time.Now().Unix(),
-			Subject:   userId,
 		},
-		userId: userId,
-		roles:  roles,
+		UserId: userId,
+		Roles:  roles,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -68,4 +81,33 @@ func (m *tokenManager) NewRefreshToken() (string, error) {
 
 	m.log.Infof("Refresh token created successfully")
 	return fmt.Sprintf("%x", buffer), nil
+}
+
+func (m *tokenManager) VerifyAccessToken(accessToken string) (*JwtClaims, error) {
+	token, err := jwt.ParseWithClaims(accessToken, &JwtClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			m.log.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, ErrInvalidToken
+		}
+		return []byte(m.secretKey), nil
+	})
+
+	if err != nil {
+		verr, ok := err.(*jwt.ValidationError)
+		if ok && errors.Is(verr.Inner, ErrExpiredToken) {
+			m.log.Errorf("Access token is expired: %v", err)
+			return nil, ErrExpiredToken
+		}
+
+		m.log.Errorf("Invalid access token: %v", err)
+		return nil, ErrInvalidToken
+	}
+
+	if claims, ok := token.Claims.(*JwtClaims); ok && token.Valid {
+		m.log.Infof("Access token parsed successfully for user %s", claims.UserId)
+		return claims, nil
+	}
+
+	m.log.Errorf("Invalid access token claims")
+	return nil, ErrInvalidToken
 }
