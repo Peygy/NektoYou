@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/peygy/nektoyou/internal/pkg/context"
+	"github.com/peygy/nektoyou/internal/pkg/database/postgres"
 	"github.com/peygy/nektoyou/internal/pkg/grpc"
 	"github.com/peygy/nektoyou/internal/pkg/logger"
 	"github.com/peygy/nektoyou/internal/services/token_service/config"
@@ -20,9 +21,9 @@ func main() {
 				logger.NewLogger,
 				context.NewContext,
 				grpc.NewGrpcServer,
+				postgres.NewDatabaseConnection,
 
 				jwt.NewTokenManager,
-				data.NewDatabaseConnection,
 			),
 			fx.Invoke(data.InitDatabaseSchema),
 			fx.Invoke(grpcConn.InitTokenGrpcServer),

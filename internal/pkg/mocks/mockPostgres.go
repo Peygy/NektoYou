@@ -12,9 +12,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
-const schemaFilePath = "../../config/schema.sql"
-
-func SetupTestContainer_Postgres() (*sql.DB, func(), error) {
+func SetupTestContainer_Postgres(schemaFilePath string) (*sql.DB, func(), error) {
 	ctx := context.Background()
 
 	req := testcontainers.ContainerRequest{

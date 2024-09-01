@@ -5,7 +5,7 @@ go 1.23
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/lib/pq v1.10.9
-	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240831174710-48bd745bcff8
+	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240901120928-4a9f839c1a7b
 	go.uber.org/fx v1.22.2
 )
 

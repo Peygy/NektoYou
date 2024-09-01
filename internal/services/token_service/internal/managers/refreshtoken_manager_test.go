@@ -29,19 +29,16 @@ func TestAddToken_Success_AddingNewRefreshToken(t *testing.T) {
 	mockLog.On("Info", "RefreshManager created").Return()
 	mockLog.On("Infof", "Refresh token %s successfully added to user %s", mock.Anything, mock.Anything).Return()
 
-	testUserName := "testUser1"
-	testHashedPassword := "testPassword1"
+	testUserId := "testUserId1"
 	testRefreshToken := "testToken1"
-
-	userId := insertUser(t, db, testUserName, testHashedPassword)
 
 	// Act
 	refreshManager := NewRefreshManager(db, mockLog)
-	err := refreshManager.AddToken(userId, testRefreshToken)
+	err := refreshManager.AddToken(testUserId, testRefreshToken)
 
 	// Assert
 	assert.NoError(t, err, "Expected no error when adding refresh token")
-	checkRefreshToken(t, db, userId, testRefreshToken)
+	checkRefreshToken(t, db, testUserId, testRefreshToken)
 }
 
 func TestAddToken_Success_AddingRefreshTokenToUserIdWithRefreshToken(t *testing.T) {
@@ -51,41 +48,20 @@ func TestAddToken_Success_AddingRefreshTokenToUserIdWithRefreshToken(t *testing.
 	mockLog.On("Info", "RefreshManager created").Return()
 	mockLog.On("Infof", "Refresh token %s successfully added to user %s", mock.Anything, mock.Anything).Return()
 
-	testUserName := "testUser2"
-	testHashedPassword := "testPassword2"
+	testUserId := "testUserId2"
 	testRefreshToken := "testToken2"
 	newTestRefreshToken := "newTestToken2"
 
-	userId := insertUser(t, db, testUserName, testHashedPassword)
-
 	// Act
 	refreshManager := NewRefreshManager(db, mockLog)
-	err := refreshManager.AddToken(userId, testRefreshToken)
+	err := refreshManager.AddToken(testUserId, testRefreshToken)
 	assert.NoError(t, err, "Expected no error when adding refresh token")
-	err = refreshManager.AddToken(userId, newTestRefreshToken)
+	err = refreshManager.AddToken(testUserId, newTestRefreshToken)
 
 	// Assert
 	assert.NoError(t, err, "Expected no error when adding refresh token")
 
-	checkRefreshToken(t, db, userId, testRefreshToken)
-}
-
-func TestAddToken_NoFindUserIdInUsersTable(t *testing.T) {
-	// Arrange
-	db := dbs[refresh_serviceName]
-	mockLog := new(mocks.LoggerMock)
-	mockLog.On("Info", "RefreshManager created").Return()
-	mockLog.On("Errorf", "Can't inserts refresh token with error: %v", mock.Anything).Return()
-
-	testRefreshToken := "testToken3"
-	userId := "testId3"
-
-	// Act
-	refreshManager := NewRefreshManager(db, mockLog)
-	err := refreshManager.AddToken(userId, testRefreshToken)
-
-	// Assert
-	assert.Error(t, err, "Expected an error when adding refresh token")
+	checkRefreshToken(t, db, testUserId, testRefreshToken)
 }
 
 func TestAddToken_DuplicateRefreshToken(t *testing.T) {
@@ -94,23 +70,20 @@ func TestAddToken_DuplicateRefreshToken(t *testing.T) {
 	mockLog := new(mocks.LoggerMock)
 	mockLog.On("Info", "RefreshManager created").Return()
 	mockLog.On("Infof", "Refresh token %s successfully added to user %s", mock.Anything, mock.Anything).Return()
+	mockLog.On("Errorf", "Can't inserts refresh token with error: %v", mock.Anything).Return()
 
-	testUserName := "testUser4"
-	testHashedPassword := "testPassword4"
-	testRefreshToken := "testToken4"
-
-	userId := insertUser(t, db, testUserName, testHashedPassword)
+	testUserId := "testUserId3"
+	newTestUserId := "testUserId3_1"
+	testRefreshToken := "testToken3"
 
 	// Act
 	refreshManager := NewRefreshManager(db, mockLog)
-	err := refreshManager.AddToken(userId, testRefreshToken)
+	err := refreshManager.AddToken(testUserId, testRefreshToken)
 	assert.NoError(t, err, "Expected no error when adding refresh token")
-	err = refreshManager.AddToken(userId, testRefreshToken)
+	err = refreshManager.AddToken(newTestUserId, testRefreshToken)
 
 	// Assert
 	assert.NoError(t, err, "Expected no error when adding refresh token")
-
-	checkRefreshToken(t, db, userId, testRefreshToken)
 }
 
 func TestGetToken_SuccessGetting(t *testing.T) {
@@ -120,20 +93,17 @@ func TestGetToken_SuccessGetting(t *testing.T) {
 	mockLog.On("Info", "RefreshManager created").Return()
 	mockLog.On("Info", "Token was founded").Return()
 
-	testUserName := "testUser5"
-	testHashedPassword := "testPassword5"
-	testRefreshToken := "testToken5"
-
-	userId := insertUser(t, db, testUserName, testHashedPassword)
+	testUserId := "testUserId4"
+	testRefreshToken := "testToken4"
 
 	// Act
 	refreshManager := NewRefreshManager(db, mockLog)
 
 	query := `INSERT INTO users_tokens (user_id, token) VALUES ($1, $2) ON CONFLICT (token) DO NOTHING`
-	_, err := db.Exec(query, userId, testRefreshToken)
+	_, err := db.Exec(query, testUserId, testRefreshToken)
 	assert.NoError(t, err, "Expected no error when adding refresh token")
 
-	refreshToken, err := refreshManager.GetToken(userId)
+	refreshToken, err := refreshManager.GetToken(testUserId)
 
 	// Assert
 	assert.NoError(t, err, "Expected no error when getting refresh token")
@@ -147,31 +117,11 @@ func TestGetToken_NoAnyRefreshToken(t *testing.T) {
 	mockLog.On("Info", "RefreshManager created").Return()
 	mockLog.On("Errorf", "No refresh token was found: %v", mock.Anything).Return()
 
-	testUserName := "testUser6"
-	testHashedPassword := "testPassword6"
-
-	userId := insertUser(t, db, testUserName, testHashedPassword)
+	testUserId := "testUserId5"
 
 	// Act
 	refreshManager := NewRefreshManager(db, mockLog)
-	_, err := refreshManager.GetToken(userId)
-
-	// Assert
-	assert.Error(t, err, "Expected an error when getting refresh token")
-}
-
-func TestGetToken_NoFindUserIdInUsersTable(t *testing.T) {
-	// Arrange
-	db := dbs[refresh_serviceName]
-	mockLog := new(mocks.LoggerMock)
-	mockLog.On("Info", "RefreshManager created").Return()
-	mockLog.On("Errorf", "Can't gets refresh token: %v", mock.Anything).Return()
-
-	userId := "testUserId7"
-
-	// Act
-	refreshManager := NewRefreshManager(db, mockLog)
-	_, err := refreshManager.GetToken(userId)
+	_, err := refreshManager.GetToken(testUserId)
 
 	// Assert
 	assert.Error(t, err, "Expected an error when getting refresh token")
@@ -187,26 +137,23 @@ func TestRefreshToken_Success(t *testing.T) {
 	mockLog.On("Infof", "User's %s refresh token updated successfully", mock.Anything).Return()
 	mockLog.On("Info", "Refresh-Refresh: Transaction is commited successfully").Return()
 
-	testUserName := "testUser8"
-	testHashedPassword := "testPassword8"
-	testRefreshToken := "testToken8"
-	newTestRefreshToken := "newTestToken8"
-
-	userId := insertUser(t, db, testUserName, testHashedPassword)
+	testUserId := "testUserId7"
+	testRefreshToken := "testToken7"
+	newTestRefreshToken := "newTestToken7"
 
 	query := `INSERT INTO users_tokens (user_id, token) VALUES ($1, $2) ON CONFLICT (token) DO NOTHING`
-	_, err := db.Exec(query, userId, testRefreshToken)
+	_, err := db.Exec(query, testUserId, testRefreshToken)
 	assert.NoError(t, err, "Expected no error when adding refresh token")
 
 	// Act
 	refreshManager := NewRefreshManager(db, mockLog)
-	result, err := refreshManager.RefreshToken(userId, newTestRefreshToken)
+	result, err := refreshManager.RefreshToken(testUserId, newTestRefreshToken)
 
 	// Assert
 	assert.True(t, result, "Expected true when updating refresh token")
 	assert.NoError(t, err, "Expected no error when updating refresh token")
 
-	checkRefreshToken(t, db, userId, newTestRefreshToken)
+	checkRefreshToken(t, db, testUserId, newTestRefreshToken)
 }
 
 func TestRefreshToken_NoAnyOldRefreshToken(t *testing.T) {
@@ -217,35 +164,12 @@ func TestRefreshToken_NoAnyOldRefreshToken(t *testing.T) {
 	mockLog.On("Info", "Refresh-Refresh: Transaction is begining successfully").Return()
 	mockLog.On("Errorf", "No any refresh token in database: %v", mock.Anything).Return()
 
-	testUserName := "testUser9"
-	testHashedPassword := "testPassword9"
-	newTestRefreshToken := "newTestToken9"
-
-	userId := insertUser(t, db, testUserName, testHashedPassword)
+	testUserId := "testUserId8"
+	newTestRefreshToken := "newTestToken8"
 
 	// Act
 	refreshManager := NewRefreshManager(db, mockLog)
-	result, err := refreshManager.RefreshToken(userId, newTestRefreshToken)
-
-	// Assert
-	assert.False(t, result, "Expected false when updating refresh token")
-	assert.Error(t, err, "Expected an error when updating refresh token")
-}
-
-func TestRefreshToken_NoFindUserIdInUsersTable(t *testing.T) {
-	// Arrange
-	db := dbs[refresh_serviceName]
-	mockLog := new(mocks.LoggerMock)
-	mockLog.On("Info", "RefreshManager created").Return()
-	mockLog.On("Info", "Refresh-Refresh: Transaction is begining successfully").Return()
-	mockLog.On("Errorf", "Error retrieving old token: %v", mock.Anything).Return()
-
-	userId := "testUserId10"
-	newTestRefreshToken := "newTestToken10"
-
-	// Act
-	refreshManager := NewRefreshManager(db, mockLog)
-	result, err := refreshManager.RefreshToken(userId, newTestRefreshToken)
+	result, err := refreshManager.RefreshToken(testUserId, newTestRefreshToken)
 
 	// Assert
 	assert.False(t, result, "Expected false when updating refresh token")
@@ -262,14 +186,14 @@ func TestRefreshToken_BeginTransactionError(t *testing.T) {
 	mockLog.On("Info", "RefreshManager created").Return()
 	mockLog.On("Errorf", "Error starting transaction: %v", mock.Anything).Return()
 
-	userId := "testUserId11"
-	newTestRefreshToken := "newTestToken11"
+	testUserId := "testUserId10"
+	newTestRefreshToken := "newTestToken10"
 
 	sqlm.ExpectBegin().WillReturnError(errors.New("begin transaction error"))
 
 	// Act
 	refreshManager := NewRefreshManager(mockDB, mockLog)
-	result, err := refreshManager.RefreshToken(userId, newTestRefreshToken)
+	result, err := refreshManager.RefreshToken(testUserId, newTestRefreshToken)
 
 	// Assert
 	assert.False(t, result, "Expected false when starting transaction fails")
@@ -288,21 +212,21 @@ func TestRefreshToken_UpdateTokenError(t *testing.T) {
 	mockLog.On("Infof", "User's %s refresh token was found", mock.Anything).Return()
 	mockLog.On("Errorf", "Error updating token: %v", mock.Anything).Return()
 
-	userId := "testUserId12"
-	newTestRefreshToken := "newTestToken12"
+	testUserId := "testUserId11"
+	newTestRefreshToken := "newTestToken11"
 
 	sqlm.ExpectBegin()
 	sqlm.ExpectQuery(`SELECT token FROM users_tokens WHERE user_id = \$1 FOR UPDATE`).
-		WithArgs(userId).
+		WithArgs(testUserId).
 		WillReturnRows(sqlmock.NewRows([]string{"token"}).AddRow("oldToken"))
 	sqlm.ExpectExec(`UPDATE users_tokens SET token = \$1 WHERE user_id = \$2`).
-		WithArgs(newTestRefreshToken, userId).
+		WithArgs(newTestRefreshToken, testUserId).
 		WillReturnError(errors.New("update token error"))
 	sqlm.ExpectRollback()
 
 	// Act
 	refreshManager := NewRefreshManager(mockDB, mockLog)
-	result, err := refreshManager.RefreshToken(userId, newTestRefreshToken)
+	result, err := refreshManager.RefreshToken(testUserId, newTestRefreshToken)
 
 	// Assert
 	assert.False(t, result, "Expected false when starting transaction fails")
@@ -322,21 +246,21 @@ func TestRefreshToken_CommitTransactionError(t *testing.T) {
 	mockLog.On("Infof", "User's %s refresh token updated successfully", mock.Anything).Return()
 	mockLog.On("Errorf", "Error committing transaction: %v", mock.Anything).Return()
 
-	userId := "testUserId13"
-	newTestRefreshToken := "newTestToken13"
+	testUserId := "testUserId12"
+	newTestRefreshToken := "newTestToken12"
 
 	sqlm.ExpectBegin()
 	sqlm.ExpectQuery(`SELECT token FROM users_tokens WHERE user_id = \$1 FOR UPDATE`).
-		WithArgs(userId).
+		WithArgs(testUserId).
 		WillReturnRows(sqlmock.NewRows([]string{"token"}).AddRow("oldToken"))
 	sqlm.ExpectExec(`UPDATE users_tokens SET token = \$1 WHERE user_id = \$2`).
-		WithArgs(newTestRefreshToken, userId).
+		WithArgs(newTestRefreshToken, testUserId).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	sqlm.ExpectCommit().WillReturnError(errors.New("commit transaction error"))
 
 	// Act
 	refreshManager := NewRefreshManager(mockDB, mockLog)
-	result, err := refreshManager.RefreshToken(userId, newTestRefreshToken)
+	result, err := refreshManager.RefreshToken(testUserId, newTestRefreshToken)
 
 	// Assert
 	assert.False(t, result, "Expected false when starting transaction fails")

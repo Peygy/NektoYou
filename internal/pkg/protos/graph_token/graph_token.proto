@@ -5,7 +5,7 @@ option go_package = "./;graph_token";
 package graph_token;
 
 message CreateTokensPairRequest {
-    string userid = 1;
+    string userId = 1;
     repeated string roles = 2;
 }
 
