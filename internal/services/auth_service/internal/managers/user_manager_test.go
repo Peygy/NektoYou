@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/peygy/nektoyou/internal/services/auth_service/mocks"
+	"github.com/peygy/nektoyou/internal/pkg/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

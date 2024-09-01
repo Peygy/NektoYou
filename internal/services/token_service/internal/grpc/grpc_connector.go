@@ -41,12 +41,12 @@ func (s *grpcServer) CreateTokensPair(ctx context.Context, in *pb.CreateTokensPa
 		return nil, err
 	}
 
-	err = s.refreshManager.AddToken(in.Userid, rt)
+	err = s.refreshManager.AddToken(in.UserId, rt)
 	if err != nil {
 		return nil, err
 	}
 
-	at, err := s.tokenManager.NewAccessToken(in.Userid, time.Minute*5, in.Roles...)
+	at, err := s.tokenManager.NewAccessToken(in.UserId, time.Minute*5, in.Roles...)
 	if err != nil {
 		return nil, err
 	}

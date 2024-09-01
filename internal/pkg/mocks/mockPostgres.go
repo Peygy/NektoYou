@@ -20,8 +20,8 @@ func SetupTestContainer_Postgres(schemaFilePath string) (*sql.DB, func(), error)
 		ExposedPorts: []string{"5432/tcp"},
 		WaitingFor:   wait.ForListeningPort("5432/tcp"),
 		Env: map[string]string{
-			"POSTGRES_USER":     "postgres",
-			"POSTGRES_PASSWORD": "postgres",
+			"POSTGRES_USER":     "testuser",
+			"POSTGRES_PASSWORD": "testpassword",
 			"POSTGRES_DB":       "testdb",
 		},
 	}

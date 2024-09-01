@@ -32,7 +32,7 @@ func (r *mutationResolver) RegisterUser(ctx context.Context, input model.UserInp
 	clToken := pbToken.NewCreateTokensPairServiceClient(r.GrpcServices[tokenConnIdx].Conn)
 
 	tokenPairResponce, err := clToken.CreateTokensPair(ctx, &pbToken.CreateTokensPairRequest{
-		Userid: signUpResponce.Userid,
+		UserId: signUpResponce.UserId,
 		Roles:  signUpResponce.Roles,
 	})
 	if err != nil {

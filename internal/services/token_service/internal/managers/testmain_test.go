@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/peygy/nektoyou/internal/services/token_service/mocks"
+	"github.com/peygy/nektoyou/internal/pkg/mocks"
 )
 
 var (
@@ -16,8 +16,10 @@ var (
 	once      sync.Once
 )
 
+const schemaFilePath = "../../config/schema.sql"
+
 func setupDB() (*sql.DB, func(), error) {
-	db, teardown, err := mocks.SetupTestContainer_Postgres()
+	db, teardown, err := mocks.SetupTestContainer_Postgres(schemaFilePath)
 	if err != nil {
 		return nil, nil, err
 	}

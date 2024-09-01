@@ -46,5 +46,5 @@ func (s *grpcServer) SignUp(ctx context.Context, in *pb.SignUpRequest) (*pb.Sign
 		return nil, err
 	}
 
-	return &pb.SignUpResponce{Userid: userId, Roles: []string{userRole}}, nil
+	return &pb.SignUpResponce{UserId: userId, Roles: []string{userRole}}, nil
 }
