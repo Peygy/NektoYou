@@ -9,7 +9,7 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/peygy/nektoyou/internal/pkg/logger"
-	"github.com/peygy/nektoyou/internal/services/auth_service/config"
+	"github.com/peygy/nektoyou/internal/services/token_service/config"
 )
 
 const schemaFilePath = "./config/schema.sql"
@@ -62,7 +62,7 @@ func InitDatabaseSchema(db *sql.DB, log logger.ILogger) error {
 		return errors.New("data: can't creates tables in the database")
 	}
 
-	log.Info("Tables users, roles, users_roles, users_tokens created successful")
+	log.Info("Table users_tokens created successfully")
 	return nil
 }
 

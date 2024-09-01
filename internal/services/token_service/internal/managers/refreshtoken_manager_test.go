@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/peygy/nektoyou/internal/services/auth_service/mocks"
+	"github.com/peygy/nektoyou/internal/services/token_service/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -14,14 +14,6 @@ import (
 var (
 	refresh_serviceName = "IRefreshManager"
 )
-
-func insertUser(t *testing.T, db *sql.DB, userName, hashedPassword string) string {
-	var userId string
-	query := `INSERT INTO users (username, password_hash) VALUES ($1, $2) RETURNING id`
-	err := db.QueryRow(query, userName, hashedPassword).Scan(&userId)
-	assert.NoError(t, err, "Expected no error when gets querying user")
-	return userId
-}
 
 func checkRefreshToken(t *testing.T, db *sql.DB, userId, testRefreshToken string) {
 	var token string

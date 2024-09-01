@@ -8,7 +8,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/peygy/nektoyou/internal/pkg/logger"
-	"github.com/peygy/nektoyou/internal/services/auth_service/config"
+	"github.com/peygy/nektoyou/internal/services/token_service/config"
 )
 
 var (
@@ -33,7 +33,7 @@ type JwtClaims struct {
 	jwt.StandardClaims
 }
 
-func NewTokenManager(tknCfg *config.TokenManagerConfig, logger logger.ILogger) ITokenManager {
+func NewTokenManager(tknCfg *config.TokenConfig, logger logger.ILogger) ITokenManager {
 	return &tokenManager{secretKey: tknCfg.SecretKey, log: logger}
 }
 

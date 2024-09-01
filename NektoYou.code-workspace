@@ -17,6 +17,10 @@
 			"path": "internal/services/auth_service"
 		},
 		{
+			"name": "token_service",
+			"path": "internal/services/token_service"
+		},
+		{
 			"name": "graphql",
 			"path": "internal/services/graphql"
 		}

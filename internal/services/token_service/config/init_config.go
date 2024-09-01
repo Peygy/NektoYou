@@ -7,9 +7,14 @@ import (
 
 const configPath = "./config/config.dev.yml"
 
-type AuthConfig struct {
+type TokenServiceConfig struct {
 	GrpcServer     *grpc.GrpcServerConfig `yaml:"grpc-server"`
+	TokenConfig    *TokenConfig           `yaml:"token-config"`
 	DatabaseConfig *DatabaseConfig        `yaml:"database"`
+}
+
+type TokenConfig struct {
+	SecretKey string `yaml:"secretKey"`
 }
 
 type DatabaseConfig struct {
@@ -20,11 +25,11 @@ type DatabaseConfig struct {
 	DbName   string `yaml:"dbname"`
 }
 
-func NewAuthConfig() (*AuthConfig, *grpc.GrpcServerConfig, *DatabaseConfig, error) {
-	cfg, err := config.NewConfig[AuthConfig](configPath)
+func NewTokenServiceConfig() (*TokenServiceConfig, *grpc.GrpcServerConfig, *TokenConfig, *DatabaseConfig, error) {
+	cfg, err := config.NewConfig[TokenServiceConfig](configPath)
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, nil, err
 	}
 
-	return cfg, cfg.GrpcServer, cfg.DatabaseConfig, nil
+	return cfg, cfg.GrpcServer, cfg.TokenConfig, cfg.DatabaseConfig, nil
 }

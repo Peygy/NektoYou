@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/peygy/nektoyou/internal/services/auth_service/config"
-	"github.com/peygy/nektoyou/internal/services/auth_service/internal/services/jwt"
-	"github.com/peygy/nektoyou/internal/services/auth_service/mocks"
+	"github.com/peygy/nektoyou/internal/services/token_service/config"
+	"github.com/peygy/nektoyou/internal/services/token_service/internal/jwt"
+	"github.com/peygy/nektoyou/internal/services/token_service/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -33,7 +33,7 @@ func TestNewRefreshToken_Error(t *testing.T) {
 
 func TestVerifyAccessToken_Success(t *testing.T) {
 	// Arrange
-	tokenConfig := &config.TokenManagerConfig{SecretKey: "secretKey"}
+	tokenConfig := &config.TokenConfig{SecretKey: "secretKey"}
 	mockLog := new(mocks.LoggerMock)
 	mockLog.On("Infof", "Access token of user %s created successfully", mock.Anything).Return()
 	mockLog.On("Infof", "Access token parsed successfully for user %s", mock.Anything).Return()

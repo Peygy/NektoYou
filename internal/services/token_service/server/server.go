@@ -5,7 +5,7 @@ import (
 
 	"github.com/peygy/nektoyou/internal/pkg/grpc"
 	"github.com/peygy/nektoyou/internal/pkg/logger"
-	"github.com/peygy/nektoyou/internal/services/auth_service/internal/data"
+	"github.com/peygy/nektoyou/internal/services/token_service/internal/data"
 	"go.uber.org/fx"
 )
 

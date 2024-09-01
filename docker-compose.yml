@@ -1,12 +1,20 @@
 version: '3.8'
 
 services:
+  react-client:
+    build: ./client
+    ports:
+      - "80:80"
+    depends_on:
+      - graphql-server
+
   graphql-server:
     build: ./internal/services/graphql
     ports:
       - "4000:4000"
     depends_on:
       - auth-service
+      - token-service
     networks:
       - microservices-network
 
@@ -33,17 +41,34 @@ services:
     networks:
       - auth-network
 
-  react-client:
-    build: ./client
+  token-service:
+    build: ./internal/services/token_service
     ports:
-      - "80:80"
+      - "5102:5102"
     depends_on:
-      - graphql-server
-      - auth-service
+      - token-postgres-db
+    networks:
+      - microservices-network
+      - token-network
+
+  token-postgres-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tokendb
+    ports:
+      - "5433:5432"
+    volumes:
+      - token-postgres-data:/var/lib/postgresql/data
+    networks:
+      - token-network
 
 volumes:
   auth-postgres_data:
+  token-postgres-data:
 
 networks:
   microservices-network:
   auth-network:
+  token-network:

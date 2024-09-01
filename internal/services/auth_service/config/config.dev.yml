@@ -2,9 +2,6 @@ grpc-server:
   port: ":5101"
   host: ""
 
-token-manager:
-  secretKey: "secret-key"
-
 database:
   host: "auth-postgres-db"
   port: 5432

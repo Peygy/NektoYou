@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/peygy/nektoyou/internal/services/auth_service/mocks"
+	"github.com/peygy/nektoyou/internal/services/token_service/mocks"
 )
 
 var (
@@ -29,7 +29,7 @@ func TestMain(m *testing.M) {
 		dbs = make(map[string]*sql.DB)
 		teardowns = make(map[string]func())
 
-		services := []string{"IRoleManager", "IUserManager"}
+		services := []string{"IRefreshManager"}
 
 		for _, service := range services {
 			db, teardown, err := setupDB()

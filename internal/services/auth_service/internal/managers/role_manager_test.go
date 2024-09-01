@@ -15,6 +15,14 @@ var (
 	role_serviceName = "IRoleManager"
 )
 
+func insertUser(t *testing.T, db *sql.DB, userName, hashedPassword string) string {
+	var userId string
+	query := `INSERT INTO users (username, password_hash) VALUES ($1, $2) RETURNING id`
+	err := db.QueryRow(query, userName, hashedPassword).Scan(&userId)
+	assert.NoError(t, err, "Expected no error when gets querying user")
+	return userId
+}
+
 func getUserRoleId(t *testing.T, db *sql.DB, testRole string) string {
 	var roleId string
 	query := `SELECT id FROM roles WHERE role_name = $1`

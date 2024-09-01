@@ -10,8 +10,8 @@ message SignUpRequest {
 }
 
 message SignUpResponce {
-    string accessToken = 1;
-    string refreshToken = 2;
+    string userid = 1;
+    repeated string roles = 2;
 }
 
 service SignUpService {

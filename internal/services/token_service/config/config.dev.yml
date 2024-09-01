@@ -1,0 +1,13 @@
+grpc-server:
+  port: ":5102"
+  host: ""
+
+token-config:
+  secretKey: "secret-key"
+
+database:
+  host: "token-postgres-db"
+  port: 5433
+  user: "postgres"
+  password: "postgres"
+  dbname: "tokendb"
