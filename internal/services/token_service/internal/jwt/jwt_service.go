@@ -34,6 +34,7 @@ type JwtClaims struct {
 }
 
 func NewTokenManager(tknCfg *config.TokenConfig, logger logger.ILogger) ITokenManager {
+	logger.Info("TokenManager created")
 	return &tokenManager{secretKey: tknCfg.SecretKey, log: logger}
 }
 
@@ -79,7 +80,7 @@ func (m *tokenManager) NewRefreshToken() (string, error) {
 		return "", errors.New("jwt: can't creates refresh token")
 	}
 
-	m.log.Infof("Refresh token created successfully")
+	m.log.Info("Refresh token created successfully")
 	return fmt.Sprintf("%x", buffer), nil
 }
 
@@ -93,13 +94,16 @@ func (m *tokenManager) VerifyAccessToken(accessToken string) (*JwtClaims, error)
 	})
 
 	if err != nil {
-		verr, ok := err.(*jwt.ValidationError)
-		if ok && errors.Is(verr.Inner, ErrExpiredToken) {
-			m.log.Errorf("Access token is expired: %v", err)
-			return nil, ErrExpiredToken
+		if validationErr, ok := err.(*jwt.ValidationError); ok {
+			if validationErr.Errors&jwt.ValidationErrorExpired != 0 {
+				m.log.Errorf("Access token is expired: %v", err)
+				return nil, ErrExpiredToken
+			}
+			m.log.Errorf("Invalid access token: %v", err)
+			return nil, ErrInvalidToken
 		}
 
-		m.log.Errorf("Invalid access token: %v", err)
+		m.log.Errorf("Failed to parse access token: %v", err)
 		return nil, ErrInvalidToken
 	}
 
@@ -108,6 +112,6 @@ func (m *tokenManager) VerifyAccessToken(accessToken string) (*JwtClaims, error)
 		return claims, nil
 	}
 
-	m.log.Errorf("Invalid access token claims")
+	m.log.Error("Invalid access token claims")
 	return nil, ErrInvalidToken
 }

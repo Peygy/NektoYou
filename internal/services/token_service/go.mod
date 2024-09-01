@@ -6,9 +6,8 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/lib/pq v1.10.9
-	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240901142508-b878e9543afd
+	github.com/peygy/nektoyou/internal/pkg v0.0.0-20240901151347-b56842a67a10
 	github.com/stretchr/testify v1.9.0
-	github.com/testcontainers/testcontainers-go v0.33.0
 	go.uber.org/fx v1.22.2
 )
 
@@ -73,8 +72,10 @@ require (
 require (
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
+	github.com/testcontainers/testcontainers-go v0.33.0 // indirect
 	go.uber.org/dig v1.18.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/sys v0.24.0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20240827150818-7e3bb234dfed // indirect
 )
