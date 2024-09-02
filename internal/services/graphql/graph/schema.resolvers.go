@@ -7,16 +7,25 @@ package graph
 import (
 	"context"
 	"fmt"
-	"sort"
 
+	"github.com/peygy/nektoyou/internal/pkg/grpc"
 	pbAuth "github.com/peygy/nektoyou/internal/pkg/protos/graph_auth"
 	pbToken "github.com/peygy/nektoyou/internal/pkg/protos/graph_token"
 	"github.com/peygy/nektoyou/internal/services/graphql/graph/model"
 )
 
+func findServiceIndex(services []grpc.GrpcService, name string) int {
+	for i, service := range services {
+		if service.Name == name {
+			return i
+		}
+	}
+	return -1
+}
+
 // RegisterUser is the resolver for the registerUser field.
 func (r *mutationResolver) RegisterUser(ctx context.Context, input model.UserInput) (*model.AuthPayload, error) {
-	authConnIdx := sort.Search(len(r.GrpcServices), func(i int) bool { return r.GrpcServices[i].Name == "auth_service" })
+	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
 	clAuth := pbAuth.NewSignUpServiceClient(r.GrpcServices[authConnIdx].Conn)
 
 	signUpResponce, err := clAuth.SignUp(ctx, &pbAuth.SignUpRequest{
@@ -28,7 +37,7 @@ func (r *mutationResolver) RegisterUser(ctx context.Context, input model.UserInp
 		return nil, fmt.Errorf("graphql: could not sign up new user: %v", err)
 	}
 
-	tokenConnIdx := sort.Search(len(r.GrpcServices), func(i int) bool { return r.GrpcServices[i].Name == "token_service" })
+	tokenConnIdx := findServiceIndex(r.GrpcServices, "token_service")
 	clToken := pbToken.NewCreateTokensPairServiceClient(r.GrpcServices[tokenConnIdx].Conn)
 
 	tokenPairResponce, err := clToken.CreateTokensPair(ctx, &pbToken.CreateTokensPairRequest{

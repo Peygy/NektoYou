@@ -9,4 +9,4 @@ grpc-client:
       host: "auth-service"
     - name: "token_service"
       port: ":5102"
-      host: "token_service"
+      host: "token-service"

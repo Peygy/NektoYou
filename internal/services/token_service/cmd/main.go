@@ -9,6 +9,7 @@ import (
 	"github.com/peygy/nektoyou/internal/services/token_service/internal/data"
 	grpcConn "github.com/peygy/nektoyou/internal/services/token_service/internal/grpc"
 	"github.com/peygy/nektoyou/internal/services/token_service/internal/jwt"
+	"github.com/peygy/nektoyou/internal/services/token_service/internal/managers"
 	"github.com/peygy/nektoyou/internal/services/token_service/server"
 	"go.uber.org/fx"
 )
@@ -23,6 +24,7 @@ func main() {
 				grpc.NewGrpcServer,
 				postgres.NewDatabaseConnection,
 
+				managers.NewRefreshManager,
 				jwt.NewTokenManager,
 			),
 			fx.Invoke(data.InitDatabaseSchema),
